@@ -33,3 +33,6 @@ Assume we want to create a branch "dev" based on the `main` branch:
 ### Rewrite commit message:
 - Can only be done if hasn't push to remote repo: `git commit --amend`
 
+### Uncommit your most recent commit (locally):
+`git reset --soft HEAD~1`
+
