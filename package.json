@@ -1,0 +1,27 @@
+{
+  "name": "webay",
+  "version": "1.0.0",
+  "description": "An auction site",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app/server.js",
+    "dev": "nodemon app/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexgmaier11/CS375GroupProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexgmaier11/CS375GroupProject/issues"
+  },
+  "homepage": "https://github.com/alexgmaier11/CS375GroupProject#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
