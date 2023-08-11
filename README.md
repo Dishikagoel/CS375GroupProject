@@ -1,4 +1,4 @@
-# CS375GroupProject
+# CS375GroupProject WeBay
 
 ## How to setup development environment:
 - Clone the project: `git clone git@github.com:alexgmaier11/CS375GroupProject.git`
