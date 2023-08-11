@@ -27,7 +27,7 @@ Assume we want to create a branch "dev" based on the `main` branch:
 ### Push commit to remote GitHub repo
 - `git status` to see anything needs to be added
 - `git add <filenames>` or to add everything: `git add .`
-- `git commit -m "your message"`
+- `git commit -m "your message"` put in present tense
 - `git push origin <branch-name>` (don't push to main !!!)
 
 ### Rewrite commit message:
