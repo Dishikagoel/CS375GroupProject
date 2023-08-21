@@ -15,12 +15,6 @@ pool.connect().then(() => {
     console.log("Connected to database");
 });
 
-// Example query
-pool.query("SELECT * FROM auction;")
-    .then((result) => {
-        console.log(result.rows);
-    })
-
 // Example route
 /*
 We can split routes into separate files.
@@ -29,6 +23,9 @@ work on a different file to avoid merge conflicts.
 */
 const exampleRouter = require('./routes/example');
 app.use('/example', exampleRouter);
+
+const getRouter = require('./routes/get');
+app.use('/get', getRouter);
 
 app.get('/', (req, res) => res.send());
 
