@@ -1,6 +1,7 @@
-import { Typography, AppBar, CssBaseline, Container, Toolbar } from '@mui/material';
+import { Typography, AppBar, CssBaseline, Container, Toolbar, Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
+import AppBarr from '../../components/appbar';
 
 const theme = createTheme({
     palette: {
@@ -13,13 +14,7 @@ const Home = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <AppBar position="relative" color="primary">
-                <Toolbar>
-                    <Typography variant="h6" color="inherit" noWrap>
-                        WeBay
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <AppBarr />
             <main>
                 <div>
                     <Container maxWidth="sm">
