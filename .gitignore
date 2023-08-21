@@ -4,6 +4,7 @@ node_modules/
 # Ignore environment files
 .env
 .env.*
+env.*
 
 # Ignore build directory
 build/
