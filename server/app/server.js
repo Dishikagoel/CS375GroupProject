@@ -53,6 +53,8 @@ app.use('/upload', imageUploadRouter);
 
 const auctionRouter = require('./routes/auction');
 app.use('/auction', auctionRouter);
+const newUserRouter = require('./routes/newUser');
+app.use('/newUser', newUserRouter);
 
 app.get('/', (req, res) => res.send());
 
