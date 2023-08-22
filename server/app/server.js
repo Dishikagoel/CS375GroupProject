@@ -27,6 +27,9 @@ app.use('/example', exampleRouter);
 const getRouter = require('./routes/get');
 app.use('/get', getRouter);
 
+const newUserRouter = require('./routes/newUser');
+app.use('/newUser', newUserRouter);
+
 app.get('/', (req, res) => res.send());
 
 app.listen(port, hostname, () => {
