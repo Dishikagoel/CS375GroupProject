@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 import AppBarr from '../../components/appbar';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
     palette: {
@@ -11,7 +12,12 @@ const theme = createTheme({
     }
 });
 
-const Home = () => {
+const Home = ({ userID, setUserID }) => {
+    const navigate = useNavigate();
+    const sendUserID = () => {
+        navigate('/open-bid');
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
