@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 const SendBid = ({ socket, currentBidder, auctionID }) => {
     const [bid, setBid] = useState('');
-    const currentBidderID = currentBidder.userID;
-    const currentBidderName = currentBidder.name;
+    const currentBidderID = currentBidder?.userid;
+    const currentBidderName = currentBidder?.firstname + ' ' + currentBidder?.lastname;
 
     const sendBid = () => {
         if (bid !== '') {
@@ -19,8 +19,8 @@ const SendBid = ({ socket, currentBidder, auctionID }) => {
             <Container>
                 <TextField 
                     id="outlined-basic"
-                    key={currentBidder.userID}
-                    label={`You are: ${currentBidder.name}`}
+                    key={currentBidderID}
+                    label={`You are: ${currentBidderName}`}
                     value={bid}
                     onChange={(e) => setBid(e.target.value)}
                 />

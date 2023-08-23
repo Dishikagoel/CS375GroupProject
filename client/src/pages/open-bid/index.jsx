@@ -1,20 +1,48 @@
 import { TextField, Typography, Container, Stack } from "@mui/material";
-import { useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import SendBid from './send-bid';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import UserContext from '../../components/UserContext';
 
-const OpenBid = ({ socket, numBidders, currentUserID, auctionID }) => {
-    currentUserID = parseInt(currentUserID);
-    const currentUser = numBidders.find(bidder => bidder.userID === currentUserID);
-    const [bid, setBid] = useState(currentUser.bid);
+const OpenBid = ({ socket }) => {
+    const [bidders, setBidders] = useState([]);
+    // get auctionID from params
+    const { auctionID } = useParams();
+    
+    // Fetch current authenticated user
+    const currentUser = useContext(UserContext).currentUser;
+    const currentUserID = currentUser.userid;
+
+    const [currentBidder, setCurrentBidder] = useState({});
+    const [inputValues, setInputValues] = useState({});
+
+    // This url is for development only. When deploy, change it to "/get/auctionBidders/${auctionID}"
+    const url = `http://localhost:3000/get/auctionBidders/${auctionID}`;
+
+    useEffect(() => {
+        axios.get(url)
+        .then(response => {
+            console.log("effect is running")
+            setBidders(response.data);
+            
+            const myBidder = response.data.find(bidder => bidder.userid === currentUserID);
+            setCurrentBidder(myBidder);
+
+            const newInputValues = {};
+            for (let i=0; i < response.data.length; i++) {
+                newInputValues[response.data[i].userid] = response.data[i].finalbid;
+            }
+            setInputValues(newInputValues);
+            
+        })
+        .catch(error => console.log('Error fetching data:', error));
+    }, [auctionID]);
+    
+
+    const [bid, setBid] = useState(currentBidder?.bid);
     const [logs, setLogs] = useState([]);
 
-
-    const initialInputValues = {};
-    for (let i=0; i < numBidders.length; i++) {
-        initialInputValues[numBidders[i].userID] = numBidders[i].bid;
-    }
-
-    const [inputValues, setInputValues] = useState(initialInputValues);
 
 
     const handleInputChange = (userId, newValue) => {
@@ -39,12 +67,12 @@ const OpenBid = ({ socket, numBidders, currentUserID, auctionID }) => {
                     Open Bid
                 </Typography>
                 <Stack spacing={2}>
-                    {numBidders.map((bidder) => ( 
+                    {bidders.map((bidder) => ( 
                         <TextField 
                             id="outlined-basic"
-                            key={bidder.userID}
-                            label={bidder.name}
-                            value={inputValues[bidder.userID]}
+                            key={bidder.userid}
+                            label={`${bidder.firstname} ${bidder.lastname}`}
+                            value={inputValues[bidder.userid]}
                             InputProps={{
                                 readOnly: true,
                                 style: { cursor: 'default', backgroundColor: '#ffffff' }, // Adjust styling as needed
@@ -52,7 +80,7 @@ const OpenBid = ({ socket, numBidders, currentUserID, auctionID }) => {
                         />
                     ))}
                 </Stack>
-                <SendBid socket={socket} currentBidder={currentUser} auctionID={auctionID} />
+                <SendBid socket={socket} currentBidder={currentBidder} auctionID={auctionID} />
                 {logs.map((event) => (
                     <Typography align="center" color="textSecondary" paragraph>{event}</Typography>
                 ))}

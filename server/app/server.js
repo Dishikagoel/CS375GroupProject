@@ -3,6 +3,7 @@ let { Pool } = require("pg");
 let env = require("../env.json");
 const path = require('path');
 const http = require('http');
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
@@ -10,6 +11,12 @@ const server = http.createServer(app);
 const socketModule = require('./routes/socketModule');
 socketModule(server);
 
+// Allow cross-origin requests
+// This is for development purposes only. Remove this in production.
+app.use(cors({
+    origin: '*',
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.static(__dirname + '/public/'));
 
