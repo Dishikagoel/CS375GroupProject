@@ -1,8 +1,10 @@
-import { Typography, AppBar, CssBaseline, Container, Toolbar, CardContent, Tabs, Tab, Box, Button, Stack } from '@mui/material';
+import { Typography, AppBar, CssBaseline, Container, Toolbar, CardContent, Tabs, Tab, Box, Button, Stack, Avatar } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
 import { cyan, purple } from '@mui/material/colors';
 import * as React from 'react';
 import AppBarr from '../components/appbar';
+import {Link} from "react-router-dom";
 
 const theme = createTheme({
     palette: {
@@ -19,10 +21,12 @@ interface TabPanelProps {
 
 function Buttons() {
     return (
-      <Stack spacing={2} direction="row">
-        <Button variant="contained">Make a New Auction</Button>
-        <Button variant="contained">Browse Products</Button>
-      </Stack>
+        <Stack spacing={2} direction="row">
+            <Link to="/newAuction">
+                <Button variant="contained" startIcon={<Avatar sx={{ width: '25px', height: '25px', backgroundColor: theme.palette.secondary.main }}><AddIcon sx={{ fontSize: '18px', color: 'white' }} /></Avatar>}>New Auction</Button>
+            </Link>
+            <Button variant="contained">Browse Products</Button>
+        </Stack>
     );
 }
 
