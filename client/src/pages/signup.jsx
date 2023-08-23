@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import React, { useState } from 'react';
 import AppBarr from '../components/appbar';
+import { Link } from 'react-router-dom';
 
 const theme = createTheme({
     palette: {
@@ -28,7 +29,7 @@ const Signup = () => {
                         Sign Up for WeBay
                     </Typography>
                     <Typography variant="subtitle2" color="textSecondary" gutterBottom style={{ textAlign: 'center' }}>
-                        Create a free account or log in
+                        Already have a WeBay account? <Link to="/login">Log In</Link>
                     </Typography>
                     <form onSubmit={handleSignup}>
                         <Stack spacing={2}>
