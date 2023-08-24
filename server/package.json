@@ -19,8 +19,10 @@
   },
   "homepage": "https://github.com/alexgmaier11/CS375GroupProject#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "pg": "^8.11.2"
+    "pg": "^8.11.2",
+    "socket.io": "^4.7.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

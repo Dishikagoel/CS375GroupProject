@@ -4,6 +4,21 @@ const env = require("../../env.json");
 const router = express.Router();
 const pool = new Pool(env);
 
+// GET request to get bidder;s of an auction
+router.get('/auctionBidders/:auctionid', (req, res) => {
+    const auctionid = req.params.auctionid;
+
+    pool.query("SELECT userinfo.userid, firstname, lastname, auctionid, finalbid FROM userinfo JOIN bid ON userinfo.userid = bid.userid WHERE bid.auctionid = $1;", [auctionid])
+        .then((result) => {
+            const rows = result.rows;
+            res.json(rows);
+        })
+        .catch((error) => {
+            console.error("Error querying database:", error);
+            res.status(500).json({ error: "An error occurred while fetching data." });
+        });
+});
+
 // GET request to fetch al auctions
 // To test run: curl http://localhost:3000/get/auction
 router.get('/auction', (req, res) => {
@@ -41,7 +56,7 @@ router.get('/userinfo/:userId', (req, res) => {
 router.get('/bid/:auctionid', (req, res) => {
     const auctionid = req.params.auctionid;
 
-    pool.query("SELECT * FROM bid WHERE auctionid = $1;", [auctionid])
+    pool.query("SELECT * FROM bid, auction WHERE auctionid = $1;", [auctionid])
         .then((result) => {
             const rows = result.rows;
             console.log(rows);

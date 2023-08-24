@@ -9,3 +9,5 @@ env.*
 # Ignore build directory
 build/
 dist/
+
+.DS_Store

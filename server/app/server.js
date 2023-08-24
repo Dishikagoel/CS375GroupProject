@@ -2,8 +2,21 @@ const express = require('express');
 let { Pool } = require("pg");
 let env = require("../env.json");
 const path = require('path');
-const app = express();
+const http = require('http');
+const cors = require('cors');
 
+const app = express();
+const server = http.createServer(app);
+
+const socketModule = require('./routes/socketModule');
+socketModule(server);
+
+// Allow cross-origin requests
+// This is for development purposes only. Remove this in production.
+app.use(cors({
+    origin: '*',
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.static(__dirname + '/public/'));
 
@@ -14,6 +27,12 @@ let pool = new Pool(env);
 pool.connect().then(() => {
     console.log("Connected to database");
 });
+
+// Example query
+pool.query("SELECT * FROM auction;")
+    .then((result) => {
+        console.log(result.rows);
+    })
 
 // Example route
 /*
@@ -29,6 +48,6 @@ app.use('/get', getRouter);
 
 app.get('/', (req, res) => res.send());
 
-app.listen(port, hostname, () => {
+server.listen(port, hostname, () => {
     console.log(`Listening at: http://${hostname}:${port}`);
 })
