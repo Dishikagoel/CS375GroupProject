@@ -8,6 +8,7 @@ import UserContext from './components/UserContext';
 import Signup from './pages/signup';
 import Login from './pages/login';
 import NewAuction from './pages/newAuction.jsx';
+import UserAgreement from './pages/userAgreement';
 
 const socket = io.connect('http://localhost:3000');
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/newAuction" element={<NewAuction />} />
+            <Route path="/userAgreement" element={<UserAgreement />} />
             <Route path="/open-bid/:auctionID" element={
               <OpenBid 
                 socket={socket}

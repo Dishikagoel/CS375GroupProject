@@ -1,4 +1,4 @@
-import { Typography, AppBar, CssBaseline, Container, Toolbar, CardContent, Tabs, Tab, Box, Button, Stack, Avatar } from '@mui/material';
+import { Typography, AppBar, CssBaseline, Container, Toolbar, CardContent, Tabs, Tab, Box, Button, Stack, Avatar, Paper } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import { cyan, purple } from '@mui/material/colors';
@@ -93,18 +93,20 @@ const UserInfo = () => {
             <main>
                 <div>
                     <Container>
-                        <CardContent>
+                    <Paper elevation={3} sx={{ padding: 3, marginTop: 5 }}>
+                        <CardContent sx={{ marginBottom: 3 }}>
                             <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
                                 Hello "user name"
                             </Typography>
                             <BasicTabs />
                             </CardContent>
-                            &nbsp;
-                            <Buttons />
-                            &nbsp;
-                            <Typography>
+                            <Box sx={{ marginBottom: 3 }}>
+                                <Buttons />
+                            </Box>
+                            <Typography sx={{ marginBottom: 3 }}>
                                 Strikes: 0
                             </Typography>
+                    </Paper>
                     </Container>
                 </div>
             </main>

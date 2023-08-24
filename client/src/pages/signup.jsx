@@ -46,7 +46,12 @@ const Signup = () => {
                                         color="primary"
                                     />
                                 }
-                                label="I agree to the Terms of Service and Privacy Policy"
+                                label= {
+                                    <span>
+                                        I agree to the{' '}
+                                        <Link to="/userAgreement">Terms of Service and Privacy Policy</Link>
+                                    </span>
+                                }
                             />
                             <Button type="submit" variant="contained" fullWidth disabled={!userAgreement}>
                                 Sign Up

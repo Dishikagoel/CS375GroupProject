@@ -7,10 +7,8 @@ function AppBarr() {
     return (
         <AppBar position="relative" color="primary">
                 <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        WeBay
-                    </Typography>
-                    <Button color = "inherit" onClick={()=>navigate('/userInfo')} > <AccountCircle /> </Button>
+                <Button color = "inherit" onClick={()=>navigate('/')} component="div"> WeBay </Button>
+                <Button color = "inherit" onClick={()=>navigate('/userInfo')} > <AccountCircle /> </Button>
                 </Toolbar>
             </AppBar>
     )
