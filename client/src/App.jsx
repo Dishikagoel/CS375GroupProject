@@ -21,22 +21,22 @@ function App() {
 
   return (
     <Router>
-      <UserContext.Provider value={{ currentUser }}>
-        <div className='App'>
-          <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/userInfo" element={<UserInfo />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/newAuction" element={<NewAuction />} />
-            <Route path="/open-bid/:auctionID" element={
-              <OpenBid 
-                socket={socket}
-              />
-            } />
-          </Routes>
-        </div>
-      </UserContext.Provider>
+        <UserContext.Provider value={{ currentUser }}>
+          <div className='App'>
+            <Routes>
+              <Route path="/" element={<Home/>} />
+              <Route path="/userInfo" element={<UserInfo />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/newAuction" element={<NewAuction />} />
+              <Route path="/open-bid/:auctionID" element={
+                <OpenBid 
+                  socket={socket}
+                />
+              } />
+            </Routes>
+          </div>
+        </UserContext.Provider>
     </Router>
   )
 }

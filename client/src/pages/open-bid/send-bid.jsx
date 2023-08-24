@@ -1,5 +1,6 @@
-import { Button, TextField, Container } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useState } from 'react';
+
 
 const SendBid = ({ socket, currentBidder, auctionID }) => {
     const [bid, setBid] = useState('');
@@ -15,17 +16,15 @@ const SendBid = ({ socket, currentBidder, auctionID }) => {
     }
 
     return (
-        <div>
-            <Container>
-                <TextField 
-                    id="outlined-basic"
-                    key={currentBidderID}
-                    label={`You are: ${currentBidderName}`}
-                    value={bid}
-                    onChange={(e) => setBid(e.target.value)}
-                />
-                <Button variant="contained" onClick={sendBid}>Submit bid</Button>
-            </Container>
+        <div style={{ marginTop: 'auto' }}>
+            <TextField 
+                label={`You are: ${currentBidderName}`}
+                value={bid}
+                onChange={(e) => setBid(e.target.value)}
+                variant="outlined"
+                fullWidth
+            />
+            <Button variant="contained" onClick={sendBid} style={{ marginTop: '5px' }}>Submit bid</Button>
         </div>
     );
 };
