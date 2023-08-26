@@ -46,6 +46,9 @@ app.use('/example', exampleRouter);
 const getRouter = require('./routes/get');
 app.use('/get', getRouter);
 
+const imageUploadRouter = require('./routes/imageUpload');
+app.use('/upload', imageUploadRouter);
+
 app.get('/', (req, res) => res.send());
 
 server.listen(port, hostname, () => {

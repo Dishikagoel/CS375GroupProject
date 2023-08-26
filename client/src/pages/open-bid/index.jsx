@@ -4,7 +4,8 @@ import SendBid from './send-bid';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import UserContext from '../../components/UserContext';
-import { useThemeContext } from "../../components/ThemeContext";
+// The following import is not being used, and was causing errors since the components/ThemeContext file doesnt exist
+// import { useThemeContext } from "../../components/ThemeContext";
 import AppBarr from '../../components/appbar';
 import BidPanel from "./bid-panel";
 import ChatArea from "./chat-area";

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Typography, AppBar, CssBaseline, Container, Button, Toolbar, Grid, Paper, TextField, InputLabel, Select, MenuItem, FormControl} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import AppBarr from '../components/appbar';
+import axios from "axios";
+import { useParams } from 'react-router-dom';
 
 const theme = createTheme({
     palette: {
@@ -12,6 +14,7 @@ const theme = createTheme({
 });
 
 const NewAuction = () => {
+    const { auctionID } = useParams();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [images, setImages] = useState([]);
@@ -29,7 +32,7 @@ const NewAuction = () => {
     const [uniqueImages, setUniqueImages] = useState([]);
 
 
-    const handleImageUpload = (event) => {
+    const handleImageUpload = async (event) => {
         const selectedImages = Array.from(event.target.files);
         const newImages = selectedImages.filter(image => !uniqueImages.includes(image.name));
         if (newImages.length !== selectedImages.length) {
@@ -40,16 +43,35 @@ const NewAuction = () => {
         }
         setUniqueImages(prevUniqueImages => [...prevUniqueImages, ...newImages.map(image => image.name)]);
         setImages(prevImages => [...prevImages, ...newImages]);
-        event.target.value = '';
     };
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        if (timePeriod > 720) {
-            return;
+
+        const formData = new FormData();
+        images.forEach(image => {
+            formData.append('images', image);
+        });
+
+        try {
+            // This url is for development only. When deploy, change it to "/get/auctionBidders/${auctionID}"
+            const response = await axios.post(`http://localhost:3000/upload/${auctionID}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (response.status === 200) {
+                if (images.length > 0) {
+                    console.log('Images uploaded successfully');
+                }
+            } else {
+                console.error('Failed to upload images');
+            }
+        } catch (error) {
+            console.error('Error uploading images:', error);
         }
-        // TODO: Submit the form logic here
     };
 
     const removeImage = (indexToRemove) => {
@@ -65,7 +87,7 @@ const NewAuction = () => {
         const endTime = new Date(`2000-01-01T${end}`);
         const duration = (endTime - startTime) / (1000 * 60);
 
-        setTimePeriod(duration);
+        setTimePeriod(duration.toString());
 
         if (duration > 720) {
             setTimePeriodError("Time period exceeds 12 hours. Adjust start or end time.");
@@ -172,7 +194,6 @@ const NewAuction = () => {
                                     <input
                                         type="file"
                                         multiple
-                                        required
                                         accept="image/*"
                                         onChange={handleImageUpload}
                                     />
