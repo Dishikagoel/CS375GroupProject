@@ -25,7 +25,9 @@ function Buttons() {
             <Link to="/newAuction">
                 <Button variant="contained" startIcon={<Avatar sx={{ width: '25px', height: '25px', backgroundColor: theme.palette.secondary.main }}><AddIcon sx={{ fontSize: '18px', color: 'white' }} /></Avatar>}>New Auction</Button>
             </Link>
-            <Button variant="contained">Browse Products</Button>
+            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+                <Button variant="contained">Browse Products</Button>
+            </Link>
         </Stack>
     );
 }
