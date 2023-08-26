@@ -30,6 +30,7 @@ const NewAuction = () => {
     const [isDraggingOver, setIsDraggingOver] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [uniqueImages, setUniqueImages] = useState([]);
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
 
     const handleImageUpload = async (event) => {
@@ -66,6 +67,7 @@ const NewAuction = () => {
                 if (images.length > 0) {
                     console.log('Images uploaded successfully');
                 }
+                setIsSubmitted(true);
             } else {
                 console.error('Failed to upload images');
             }
@@ -140,180 +142,188 @@ const NewAuction = () => {
             <CssBaseline />
             <AppBarr />
             <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', paddingTop: '8vh', paddingBottom: '8vh' }}>
-                <Container>
-                    <Paper elevation={3} sx={{ p: 4 }}>
+                {isSubmitted ? (
+                    <div>
                         <Typography variant="h4" color="textPrimary" align="center" gutterBottom>
-                            Create a New Auction
+                            Auction Created Successfully!
                         </Typography>
-                        <form onSubmit={handleSubmit}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Product Name"
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Product Description"
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        multiline
-                                        rows={4}
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} mb={2}>
-                                    <InputLabel>Upload Images</InputLabel>
-                                    {errorMessage && (
-                                        <Typography color="error" variant="body2" align="center" mb={2}>
-                                            {errorMessage}
-                                        </Typography>
-                                    )}
-                                    <div
-                                        onDrop={handleDrop}
-                                        onDragOver={handleDragOver}
-                                        onDragLeave={handleDragLeave}
-                                        style={{
-                                            border: `2px dashed ${isDraggingOver ? theme.palette.secondary.main : '#ccc'}`,
-                                            padding: '1rem',
-                                            borderRadius: '4px',
-                                            transition: 'border-color 0.3s',
-                                            backgroundColor: isDraggingOver ? 'cyan' : 'white',
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        {isDraggingOver ? 'Drop here to upload' : 'Drag and drop images or click to select'}
-                                    </div>
-                                    <input
-                                        type="file"
-                                        multiple
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                    />
-                                    <ul>
-                                        {images.map((image, index) => (
-                                            <li key={index}>
-                                                {image.name}
-                                                <Button onClick={() => removeImage(index)}>Remove</Button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        label="Phone Number"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={phoneNumber}
-                                        onChange={(e) => setPhoneNumber(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        label="Email"
-                                        type="email"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <InputLabel>Auction Date *</InputLabel>
-                                    <TextField
-                                        type="date"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={auctionDate}
-                                        onChange={(e) => setAuctionDate(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <InputLabel>Auction Type *</InputLabel>
-                                    <FormControl fullWidth variant="outlined">
-                                        <Select
-                                            value={auctionType}
+                    </div>
+                ) : (
+                    <Container>
+                        <Paper elevation={3} sx={{ p: 4 }}>
+                            <Typography variant="h4" color="textPrimary" align="center" gutterBottom>
+                                Create a New Auction
+                            </Typography>
+                            <form onSubmit={handleSubmit}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label="Product Name"
+                                            variant="outlined"
                                             required
-                                            onChange={(e) => setAuctionType(e.target.value)}
-                                            label="Auction Type"
+                                            fullWidth
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label="Product Description"
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            multiline
+                                            rows={4}
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} mb={2}>
+                                        <InputLabel>Upload Images</InputLabel>
+                                        {errorMessage && (
+                                            <Typography color="error" variant="body2" align="center" mb={2}>
+                                                {errorMessage}
+                                            </Typography>
+                                        )}
+                                        <div
+                                            onDrop={handleDrop}
+                                            onDragOver={handleDragOver}
+                                            onDragLeave={handleDragLeave}
+                                            style={{
+                                                border: `2px dashed ${isDraggingOver ? theme.palette.secondary.main : '#ccc'}`,
+                                                padding: '1rem',
+                                                borderRadius: '4px',
+                                                transition: 'border-color 0.3s',
+                                                backgroundColor: isDraggingOver ? 'cyan' : 'white',
+                                                textAlign: 'center',
+                                            }}
                                         >
-                                            <MenuItem value="First-Bid Sealed">First-Bid Sealed</MenuItem>
-                                            <MenuItem value="Second-Bid Sealed">Second-Bid Sealed</MenuItem>
-                                            <MenuItem value="Open-Ascending">Open-Ascending</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                            {isDraggingOver ? 'Drop here to upload' : 'Drag and drop images or click to select'}
+                                        </div>
+                                        <input
+                                            type="file"
+                                            multiple
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                        />
+                                        <ul>
+                                            {images.map((image, index) => (
+                                                <li key={index}>
+                                                    {image.name}
+                                                    <Button onClick={() => removeImage(index)}>Remove</Button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            label="Phone Number"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={phoneNumber}
+                                            onChange={(e) => setPhoneNumber(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            label="Email"
+                                            type="email"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <InputLabel>Auction Date *</InputLabel>
+                                        <TextField
+                                            type="date"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={auctionDate}
+                                            onChange={(e) => setAuctionDate(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <InputLabel>Auction Type *</InputLabel>
+                                        <FormControl fullWidth variant="outlined">
+                                            <Select
+                                                value={auctionType}
+                                                required
+                                                onChange={(e) => setAuctionType(e.target.value)}
+                                                label="Auction Type"
+                                            >
+                                                <MenuItem value="First-Bid Sealed">First-Bid Sealed</MenuItem>
+                                                <MenuItem value="Second-Bid Sealed">Second-Bid Sealed</MenuItem>
+                                                <MenuItem value="Open-Ascending">Open-Ascending</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6} mb={2}>
+                                        <InputLabel>Auction Start Time *</InputLabel>
+                                        <TextField
+                                            type="time"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={auctionStartTime}
+                                            onChange={handleAuctionStartTimeChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6} mb={2}>
+                                        <InputLabel>Auction End Time *</InputLabel>
+                                        <TextField
+                                            type="time"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={auctionEndTime}
+                                            onChange={handleAuctionEndTimeChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6} mb={2}>
+                                        <TextField
+                                            label="Minimum Bid (USD)"
+                                            type="number"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={minimumBid}
+                                            onChange={handleMinimumBidChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6} mb={2}>
+                                        <TextField
+                                            label="Time Period (minutes)"
+                                            variant="outlined"
+                                            fullWidth
+                                            value={timePeriod}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                            error={!!timePeriodError}
+                                            helperText={timePeriodError}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} mb={2}>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                            fullWidth
+                                            disabled={timePeriod > 720}
+                                        >
+                                            Create Auction
+                                        </Button>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} sm={6} mb={2}>
-                                    <InputLabel>Auction Start Time *</InputLabel>
-                                    <TextField
-                                        type="time"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={auctionStartTime}
-                                        onChange={handleAuctionStartTimeChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6} mb={2}>
-                                    <InputLabel>Auction End Time *</InputLabel>
-                                    <TextField
-                                        type="time"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={auctionEndTime}
-                                        onChange={handleAuctionEndTimeChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6} mb={2}>
-                                    <TextField
-                                        label="Minimum Bid (USD)"
-                                        type="number"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={minimumBid}
-                                        onChange={handleMinimumBidChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6} mb={2}>
-                                    <TextField
-                                        label="Time Period (minutes)"
-                                        variant="outlined"
-                                        fullWidth
-                                        value={timePeriod}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                        error={!!timePeriodError}
-                                        helperText={timePeriodError}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} mb={2}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        fullWidth
-                                        disabled={timePeriod > 720}
-                                    >
-                                        Create Auction
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </form>
-                    </Paper>
-                </Container>
+                            </form>
+                        </Paper>
+                    </Container>
+                )}
             </main>
         </ThemeProvider>
 );
