@@ -60,6 +60,14 @@ const Login = () => {
                     </form>
                 </Paper>
             </Container>
+            <style>
+                {`
+                  body {
+                    margin: 0;
+                    padding: 0;
+                  }
+                `}
+            </style>
         </ThemeProvider>
     );
 };
