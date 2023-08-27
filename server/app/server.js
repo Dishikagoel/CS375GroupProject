@@ -46,6 +46,9 @@ app.use('/example', exampleRouter);
 const getRouter = require('./routes/get');
 app.use('/get', getRouter);
 
+const postRouter = require('./routes/post');
+app.use('/post', postRouter);
+
 app.get('/', (req, res) => res.send());
 
 server.listen(port, hostname, () => {
