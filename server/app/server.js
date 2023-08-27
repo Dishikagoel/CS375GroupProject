@@ -29,10 +29,10 @@ pool.connect().then(() => {
 });
 
 // Example query
-pool.query("SELECT * FROM auction;")
+/* pool.query("SELECT * FROM auction;")
     .then((result) => {
         console.log(result.rows);
-    })
+    }) */
 
 // Example route
 /*
@@ -48,6 +48,9 @@ app.use('/get', getRouter);
 
 const imageUploadRouter = require('./routes/imageUpload');
 app.use('/upload', imageUploadRouter);
+
+const auctionRouter = require('./routes/auction');
+app.use('/auction', auctionRouter);
 
 app.get('/', (req, res) => res.send());
 
