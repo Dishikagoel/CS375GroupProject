@@ -14,45 +14,10 @@ const leftColumnStyle = {
   };
 
 
-const BidPanel = ({ socket, isBidOpen }) => {
-    const [bidders, setBidders] = useState([]);
-    // get auctionID from params
-    const { auctionID } = useParams();
-
-    // Fetch current authenticated user
-    const currentUser = useContext(UserContext).currentUser;
-    const currentUserID = currentUser.userid;
-
-    const [currentBidder, setCurrentBidder] = useState({});
-    const [inputValues, setInputValues] = useState({});
-
+const BidPanel = ({ socket, auctionID, bidders, isBidOpen, currentBidder, inputValues, setInputValues }) => {
     const [logs, setLogs] = useState([]);
-
     const [bid, setBid] = useState(currentBidder?.bid);
-    
-    // This url is for development only. When deploy, change it to "/get/auctionBidders/${auctionID}"
-    const url = `http://localhost:3000/get/auctionBidders/${auctionID}`;
 
-    useEffect(() => {
-        axios.get(url)
-        .then(response => {
-            console.log("effect is running")
-            setBidders(response.data);
-            
-            const myBidder = response.data.find(bidder => bidder.userid === currentUserID);
-            setCurrentBidder(myBidder);
-
-            const newInputValues = {};
-            for (let i=0; i < response.data.length; i++) {
-                newInputValues[response.data[i].userid] = response.data[i].finalbid;
-            }
-            setInputValues(newInputValues);
-            
-        })
-        .catch(error => console.log('Error fetching data:', error));
-    }, [auctionID]);
-
-    
     const handleInputChange = (userId, newValue) => {
         setInputValues((prevInputValues) => ({
           ...prevInputValues,
@@ -60,12 +25,14 @@ const BidPanel = ({ socket, isBidOpen }) => {
         }));
       };
 
-    socket.on('receive-bid', ({ auctionID, currentBidderID, currentBidderName, bid, bidtime }) => {
-        const message = `Auction ${auctionID} received bid ${bid} from bidder ${currentBidderName} at ${bidtime}`;
-        setLogs(logs.concat(message));
-        setBid(bid);
-        handleInputChange(currentBidderID, bid);
-    });
+    useEffect(() => {
+        socket.on('receive-bid', ({ auctionID, currentBidderID, currentBidderName, bid, bidtime }) => {
+            const message = `Auction ${auctionID} received bid ${bid} from bidder ${currentBidderName} at ${bidtime}`;
+            setLogs(logs.concat(message));
+            setBid(bid);
+            handleInputChange(currentBidderID, bid);
+        });
+    }, [socket]);
 
     return (
         <Paper elevation={3} style={leftColumnStyle}>

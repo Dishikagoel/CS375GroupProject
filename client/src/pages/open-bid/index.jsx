@@ -13,12 +13,52 @@ import axios from 'axios';
 const OpenBid = ({ socket }) => {
     const [isBidOpen, setIsBidOpen] = useState(true);
     const [isAuctionEnded, setIsAuctionEnded] = useState(false);
-    const timeLimit = 15;
-    const [countdown, setCountdown] = useState(timeLimit);
+    const [countdown, setCountdown] = useState();
     const { auctionID } = useParams();
-    
-    const userid = '402';
-    socket.emit('join_room', { userid, room: auctionID });
+
+    const [currentBidder, setCurrentBidder] = useState({});
+    const [inputValues, setInputValues] = useState({});
+    const [bidders, setBidders] = useState([]);
+
+    // Fetch current authenticated user
+    const currentUser = useContext(UserContext).currentUser;
+    const currentUserID = currentUser.userid;
+
+    // This url is for development only. When deploy, change it to "/get/auctionBidders/${auctionID}"
+    const url = `http://localhost:3000/get/auctionBidders/${auctionID}`;
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/get/bid/${auctionID}`)
+        .then(res => {
+            let starttime = new Date(res.data[0].starttime);
+            let endtime = new Date(res.data[0].endtime);
+            
+            let duration = (endtime - starttime) / 1000; // in seconds
+            console.log(duration);
+            setCountdown(duration);
+        })
+    }, []);
+
+    useEffect(() => {
+        axios.get(url)
+        .then(response => {
+            console.log("effect is running")
+            setBidders(response.data);
+            
+            const myBidder = response.data.find(bidder => bidder.userid === currentUserID);
+            setCurrentBidder(myBidder);
+
+            const newInputValues = {};
+            for (let i=0; i < response.data.length; i++) {
+                newInputValues[response.data[i].userid] = response.data[i].finalbid;
+            }
+            setInputValues(newInputValues);
+            
+        })
+        .catch(error => console.log('Error fetching data:', error));
+    }, [auctionID]);
+
+    socket.emit('join_room', { userid: currentUserID, room: auctionID });
 
     // Set isAuctionEnded to true when countdown reaches 0 and isBidOpen is false
     useEffect(() => {
@@ -47,7 +87,15 @@ const OpenBid = ({ socket }) => {
 
             <Grid container spacing={2}>
                 <Grid item xs={4}>
-                    <BidPanel socket={socket} isBidOpen={isBidOpen} />
+                    <BidPanel 
+                        socket={socket}
+                        auctionID={auctionID}
+                        bidders={bidders}
+                        isBidOpen={isBidOpen}
+                        currentBidder={currentBidder}
+                        inputValues={inputValues}
+                        setInputValues={setInputValues}
+                    />
                 </Grid>
                 <Grid item xs={8}>
                     <CountdownTimer countdown={countdown} setCountdown={setCountdown} trigger={isBidOpen} setTrigger={setIsBidOpen} />

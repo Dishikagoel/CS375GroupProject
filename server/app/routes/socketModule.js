@@ -38,11 +38,14 @@ module.exports = (server) => {
                     if (error) {
                         console.error("Error querying database:", error);
                         socket.emit('receive-bid', { error: "An error occurred while submitting bid." });
-                    } else {
-                        console.log('Insert result:', result.rows);
                     }
                 });
                 io.in(room).emit('receive-bid', data);
+
+                socket.on('disconnect', () => {
+                    console.log('User disconnected:', socket.id);
+                    socket.off('send-bid');
+                });
             });
         });
         
