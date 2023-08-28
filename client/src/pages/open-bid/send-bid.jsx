@@ -2,7 +2,7 @@ import { Button, TextField } from "@mui/material";
 import { useState } from 'react';
 
 
-const SendBid = ({ socket, currentBidder, auctionID }) => {
+const SendBid = ({ socket, currentBidder, auctionID, isBidOpen }) => {
     const [bid, setBid] = useState('');
     const currentBidderID = currentBidder?.userid;
     const currentBidderName = currentBidder?.firstname + ' ' + currentBidder?.lastname;
@@ -23,6 +23,7 @@ const SendBid = ({ socket, currentBidder, auctionID }) => {
                 onChange={(e) => setBid(e.target.value)}
                 variant="outlined"
                 fullWidth
+                disabled={!isBidOpen}
             />
             <Button variant="contained" onClick={sendBid} style={{ marginTop: '5px' }}>Submit bid</Button>
         </div>

@@ -6,7 +6,7 @@ const chatAreaStyle = {
   maxHeight: '85vh',
   overflowY: 'auto',
   padding: '16px',
-  height: '85vh',
+  height: '70vh',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',

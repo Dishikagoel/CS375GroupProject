@@ -14,7 +14,7 @@ const leftColumnStyle = {
   };
 
 
-const BidPanel = ({ socket }) => {
+const BidPanel = ({ socket, isBidOpen }) => {
     const [bidders, setBidders] = useState([]);
     // get auctionID from params
     const { auctionID } = useParams();
@@ -87,6 +87,7 @@ const BidPanel = ({ socket }) => {
                 socket={socket} 
                 currentBidder={currentBidder} 
                 auctionID={auctionID}
+                isBidOpen={isBidOpen}
             />
         </Paper>
     )

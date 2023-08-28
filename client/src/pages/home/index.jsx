@@ -3,6 +3,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 import AppBarr from '../../components/appbar';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const theme = createTheme({
     palette: {
@@ -12,6 +14,16 @@ const theme = createTheme({
 });
 
 const Home = () => {
+    const url = "http://localhost:3000/get/auction";
+    const [auctions, setAuctions] = useState([]);
+
+    useEffect(() => {
+        axios.get(url).then((res) => {
+            console.log(res.data);
+            setAuctions(res.data);
+        });
+    }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
