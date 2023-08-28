@@ -49,7 +49,7 @@ const Dashboard = () => {
                 <Grid container spacing={2}>
                     {openAuctions.map(auction => (
                         <Grid item xs={12} sm={6} md={2.5} key={auction.auctionid}>
-                            <Link to={"/productpage/${auction.auctionid}"} style={{ textDecoration: 'none' }}>
+                            <Link to={`/product/${auction.auctionid}`} style={{ textDecoration: 'none' }}>
                                 <Card style={{ width: '250px', height: '300px', display: 'flex', flexDirection: 'column' }}>
                                     <CardActionArea style={{ flex: '1', maxHeight: '80%' }}>
                                         {auction.image_urls && auction.image_urls.length > 0 ? (
