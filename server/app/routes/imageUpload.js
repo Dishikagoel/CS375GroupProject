@@ -4,6 +4,7 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const env = require('../../env.json');
+const { Pool } = require("pg");
 
 // AWS S3 setup
 const s3 = new S3Client({
@@ -13,6 +14,8 @@ const s3 = new S3Client({
     },
     region: env.awsRegion
 });
+
+const pool = new Pool(env);
 
 // multer-S3 storage configuration
 const s3Storage = multerS3({
@@ -37,6 +40,10 @@ router.post('/:auctionId', upload.array('images', 5), async (req, res) => {
     try {
         const uploadedFiles = req.files;
         const uploadedUrls = uploadedFiles.map(file => file.location);
+        const auctionId = req.params.auctionId;
+
+        const query = "UPDATE auction SET image_urls = $1 WHERE auctionid = $2";
+        await pool.query(query, [uploadedUrls, auctionId]);
 
         console.log('Images uploaded:', uploadedUrls);
 
