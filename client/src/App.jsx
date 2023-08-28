@@ -10,6 +10,7 @@ import Login from './pages/login';
 import NewAuction from './pages/newAuction.jsx';
 import UserAgreement from './pages/userAgreement';
 import Dashboard from './pages/dashboard.jsx';
+import ProductDetails from './pages/productpage';
 
 const socket = io.connect('http://localhost:3000');
 
@@ -32,6 +33,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/newAuction" element={<NewAuction />} />
             <Route path="/userAgreement" element={<UserAgreement />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/productpage/:auctionid" element={<ProductDetails />} />
             <Route path="/open-bid/:auctionID" element={
               <OpenBid 
                 socket={socket}
@@ -40,23 +43,6 @@ function App() {
           </Routes>
         </div>
       </UserContext.Provider>
-        <UserContext.Provider value={{ currentUser }}>
-          <div className='App'>
-            <Routes>
-              <Route path="/" element={<Home/>} />
-              <Route path="/userInfo" element={<UserInfo />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/newAuction" element={<NewAuction />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/open-bid/:auctionID" element={
-                <OpenBid 
-                  socket={socket}
-                />
-              } />
-            </Routes>
-          </div>
-        </UserContext.Provider>
     </Router>
   )
 }

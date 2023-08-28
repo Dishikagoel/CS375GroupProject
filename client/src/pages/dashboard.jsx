@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Import Link component
 import { Grid, Card, CardActionArea, CardContent, Typography, CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
@@ -49,7 +49,7 @@ const Dashboard = () => {
                 <Grid container spacing={2}>
                     {openAuctions.map(auction => (
                         <Grid item xs={12} sm={6} md={2.5} key={auction.auctionid}>
-                            <Link to={`http://localhost:3000/auction/${auction.auctionid}`} style={{ textDecoration: 'none' }}>
+                            <Link to={"/productpage/${auction.auctionid}"} style={{ textDecoration: 'none' }}>
                                 <Card style={{ width: '250px', height: '300px', display: 'flex', flexDirection: 'column' }}>
                                     <CardActionArea style={{ flex: '1', maxHeight: '80%' }}>
                                         {auction.image_urls && auction.image_urls.length > 0 ? (
