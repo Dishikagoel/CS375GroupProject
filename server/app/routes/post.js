@@ -11,13 +11,13 @@ router.post('/login', async (req, res) => {
     const { rows } = await pool.query(query, [user]);
 
     if (rows.length === 0) {
-        return res.status(401).json({message: 'User not found'});
+        return res.status(401).json({message: 'User not found', message: "Login successful"});
     }
 
     const userDb = rows[0];
 
     if (pass === userDb.password) {
-        return res.json({message: 'Login successful'});
+        return res.json({userId: user});
     }
     res.status(401).json({message: 'Incorrect passowrd'});
 })
