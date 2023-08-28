@@ -23,7 +23,7 @@ router.get("/addUser", (req, res) => {
     let Uphone = req.query.phone;
     let Udob = req.query.dob;
     //let Uhash = req.query.password;
-    let Uid =  "yee"; //rand();
+    let Uid =  "yert"; //rand();
     let Uaddress = req.query.address;
 
     console.log("first: ", Ufirst);

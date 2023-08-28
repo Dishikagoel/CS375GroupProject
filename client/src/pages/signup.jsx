@@ -3,6 +3,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import React, { useState } from 'react';
 import AppBarr from '../components/appbar';
+import {Helmet} from "react-helmet";
+import { useEffect } from "react";
 
 const theme = createTheme({
     palette: {
@@ -57,5 +59,8 @@ const Signup = () => {
         </ThemeProvider>
     );
 };
+
+
+
 
 export default Signup;
