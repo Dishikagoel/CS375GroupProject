@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 import AppBarr from '../components/appbar';
+import axios from 'axios';
 
 const theme = createTheme({
     palette: {
@@ -16,11 +17,17 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault();
-        // will add logic here
-        console.log('Username:', username);
-        console.log('Password:', password);
+        try {
+            const response = await axios.post('localhost:3000/post/login', {
+                user: username,
+                pass: password,
+            });
+            console.log(response.data.message);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (

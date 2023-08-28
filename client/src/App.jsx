@@ -8,6 +8,7 @@ import UserContext from './components/UserContext';
 import Signup from './pages/signup';
 import Login from './pages/login';
 import NewAuction from './pages/newAuction.jsx';
+import UserAgreement from './pages/userAgreement';
 import Dashboard from './pages/dashboard.jsx';
 
 const socket = io.connect('http://localhost:3000');
@@ -22,6 +23,23 @@ function App() {
 
   return (
     <Router>
+      <UserContext.Provider value={{ currentUser }}>
+        <div className='App'>
+          <Routes>
+            <Route path="/" element={<Home/>} />
+            <Route path="/userInfo" element={<UserInfo />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/newAuction" element={<NewAuction />} />
+            <Route path="/userAgreement" element={<UserAgreement />} />
+            <Route path="/open-bid/:auctionID" element={
+              <OpenBid 
+                socket={socket}
+              />
+            } />
+          </Routes>
+        </div>
+      </UserContext.Provider>
         <UserContext.Provider value={{ currentUser }}>
           <div className='App'>
             <Routes>
