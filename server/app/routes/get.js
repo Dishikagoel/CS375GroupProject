@@ -19,10 +19,10 @@ router.get('/auctionBidders/:auctionid', (req, res) => {
         });
 });
 
-// GET request to fetch al auctions
+// GET request to fetch active auctions
 // To test run: curl http://localhost:3000/get/auction
 router.get('/auction', (req, res) => {
-    pool.query("SELECT * FROM auction;")
+    pool.query("SELECT * FROM auction WHERE active = true;")
         .then((result) => {
             const rows = result.rows;
             console.log(rows);
