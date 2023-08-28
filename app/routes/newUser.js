@@ -31,7 +31,7 @@ router.get("/addUser", (req, res) => {
     console.log("dob: ", Udob);
     //console.log("password hash: ", Uhash);
 
-    /*
+    
         pool.query(
         `INSERT INTO userInfo(firstName, lastName, email, phone, dob, userID, passwordHash, strike) 
         VALUES($1, $2, $3, $4, $5, $6, $7, $8)
@@ -46,7 +46,7 @@ router.get("/addUser", (req, res) => {
         // something went wrong when inserting the row
         console.log(error);
     });
-    */
+
     
 });
 
