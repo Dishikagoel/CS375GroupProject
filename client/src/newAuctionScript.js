@@ -12,43 +12,30 @@ function toData(a, b, c, d, e, f, ) {
     let respMessage = document.getElementById("message");
     respMessage.textContent = ("");
 
-    let getFirst = document.getElementById("first").value;
-    let getLast = document.getElementById("last").value;
-    let getEmail = document.getElementById("email").value;
-    let getPhone = document.getElementById("phone").value;
-    let getDob = document.getElementById("dob").value;
-    let getPass1 = document.getElementById("password1").value;
-    let getPass2 = document.getElementById("password2").value;
-    let getTac = document.getElementsByName("tac");
+    let gethost = document.getElementById("first").value;
+    let getauctionID = document.getElementById("first").value;
+    let getminBid = document.getElementById("first").value;
+    let getprodName = document.getElementById("first").value;
+    let getprodDesc = document.getElementById("first").value;
+    let getauctType = document.getElementById("first").value;
+    let getstart =  document.getElementById("first").value;
+    let getend = document.getElementById("first").value;
+    let gettimePeriod = document.getElementById("first").value;
+    let getactive = document.getElementById("first").value;
+    let getimage = document.getElementById("first").value;
 
-    if ((!getTac[0].checked) || (getFirst === "") || (getLast === "") || (getEmail === "") || (getPhone === "") || (getDob === "") || (getPass1 === "") || (getPass2 === "")) {
-        console.log("Fill in all fields please");
-        respMessage.textContent = ("Fill in all fields please");
-        respMessage.style.color = "red";
-    }
-    //else if (validate fields) {}
-    else {
-        console.log("all is well");
-        respMessage.textContent = ("all is well");
-        respMessage.style.color = "black";
-    
-        //console.log("first: ", getFirst);
-        //console.log("last: ", getLast);
-        //console.log("email: ", getEmail);
-        //console.log("phone: ", getPhone);
-        //console.log("dob: ", getDob);
-        //console.log("pw1: ", getPass1);
-        //console.log("pw2: ", getPass2);
-        
-        let hashed = hashPW(getPass1);
+   // if ((!getTac[0].checked) || (getFirst === "") || (getLast === "") || (getEmail === "") || (getPhone === "") || (getDob === "") || (getPass1 === "") || (getPass2 === "")) {
+   //     console.log("Fill in all fields please");
+   //     respMessage.textContent = ("Fill in all fields please");
+   //     respMessage.style.color = "red";
+   // }
 
-        let url = `/addUser?first=${getFirst}&last=${getLast}&email=${getEmail}&phone=${getPhone}&dob=${getDob}&password=${hashed}`;
+        let url = `/addAuction?host=${gethost}&auctionid=${getauctionID}&minBid=${getminBid}&prodName=${getprodName}&prodDesc=${getprodDesc}&auctType=${getauctType}&start=${getstart}&end=${getend}&timePeriod=${gettimePeriod}&active=${getactive}&image=${getimage}`;
         fetch(url).then(response => response.json()).then(body => {
             
             respMessage.textContent = ("Success");
         
         });
-    }
 }
 
 
