@@ -3,8 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import React, { useState } from 'react';
 import AppBarr from '../components/appbar';
-import newUserSignup from './newUserScript.js';
-import { useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 const theme = createTheme({
     palette: {
@@ -18,7 +17,6 @@ const Signup = () => {
 
     const handleSignup = (event) => {
         event.preventDefault();
-        newUserSignup();
         // will add signup logic here
     };
 
@@ -55,7 +53,7 @@ const Signup = () => {
                                     </span>
                                 }
                             />
-                            <Button onClick={handleSignup} type="submit" variant="contained" fullWidth disabled={!userAgreement}>
+                            <Button type="submit" variant="contained" fullWidth disabled={!userAgreement}>
                                 Sign Up
                             </Button>
                         </Stack>
@@ -73,8 +71,5 @@ const Signup = () => {
         </ThemeProvider>
     );
 };
-
-
-
 
 export default Signup;
