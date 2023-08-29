@@ -100,7 +100,10 @@ const OpenBid = ({ socket }) => {
                 <Grid item xs={8}>
                     <CountdownTimer countdown={countdown} setCountdown={setCountdown} trigger={isBidOpen} setTrigger={setIsBidOpen} />
                     <Typography align="center" variant="h5">{isBidOpen ? "Bidding is opended" : "Bidding is closed"}</Typography>
-                    <ChatArea />
+                    <ChatArea 
+                        socket={socket}
+                        currentUser={currentUser}
+                    />
                     {/* {logs.map((event) => (
                         <Typography align="center" color="textSecondary" paragraph>{event}</Typography>
                     ))} */}

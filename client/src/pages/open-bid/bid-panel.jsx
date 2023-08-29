@@ -19,6 +19,7 @@ const BidPanel = ({ socket, auctionID, bidders, isBidOpen, currentBidder, inputV
     const [bid, setBid] = useState(currentBidder?.bid);
 
     const handleInputChange = (userId, newValue) => {
+        console.log('handleInputChange', userId, newValue);
         setInputValues((prevInputValues) => ({
           ...prevInputValues,
           [userId]: newValue,
@@ -26,12 +27,18 @@ const BidPanel = ({ socket, auctionID, bidders, isBidOpen, currentBidder, inputV
       };
 
     useEffect(() => {
-        socket.on('receive-bid', ({ auctionID, currentBidderID, currentBidderName, bid, bidtime }) => {
+        const receiveBidHandler = ({ auctionID, currentBidderID, currentBidderName, bid, bidtime }) => {
             const message = `Auction ${auctionID} received bid ${bid} from bidder ${currentBidderName} at ${bidtime}`;
             setLogs(logs.concat(message));
             setBid(bid);
             handleInputChange(currentBidderID, bid);
-        });
+        };
+        socket.once('receive-bid', receiveBidHandler);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            socket.off('receive-bid', receiveBidHandler);
+        };
     }, [socket]);
 
     return (

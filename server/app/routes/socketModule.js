@@ -4,6 +4,7 @@ const pool = require('../db');
 let auctionRoom = '';
 let allBidders = [];
 
+
 module.exports = (server) => {
     const io = new Server(server, {
         cors: {
@@ -13,41 +14,50 @@ module.exports = (server) => {
     });
 
     io.on('connection', (socket) => {
-        console.log(`A user connected: ${socket.id}`);
+            console.log(`A user connected: ${socket.id}`);
 
-        socket.on('join_room', (data) => {
-            const { userid, room } = data;
-            socket.join(room);
-
-            auctionRoom = room;
-            allBidders.push({ id: socket.id, userid, room });
-
-            socket.on('send-bid', (data) => {
+            const sendBidHandler = (data) => {
                 const { auctionID, currentBidderID, currentBidderName, bid, bidtime } = data;
-    
                 const timestampInSeconds = Math.floor(bidtime / 1000);
                 const postgresTimestamp = new Date(timestampInSeconds * 1000).toISOString();
-    
+                console.log('Bid received:', data);
                 const bidData = [currentBidderID, auctionID, postgresTimestamp, bid];
                 const updateQuery = `
                     UPDATE bid
                     SET submittedtime = $3, finalbid = $4
                     WHERE userid = $1 AND auctionid = $2;
                 `;
-                pool.query(updateQuery, bidData, (error, result) => {
+                /* pool.query(updateQuery, bidData, (error, result) => {
                     if (error) {
                         console.error("Error querying database:", error);
                         socket.emit('receive-bid', { error: "An error occurred while submitting bid." });
                     }
-                });
-                io.in(room).emit('receive-bid', data);
+                }); */
+                io.in(auctionRoom).emit('receive-bid', data);
+            }
 
-                socket.on('disconnect', () => {
-                    console.log('User disconnected:', socket.id);
-                    socket.off('send-bid');
-                });
-            });
-        });
+            const sendMessageHandler = (data) => {
+                // {userid: '401', sender: "me", message: 'I am fine'}
+                const { userid, sender, message } = data;
+                console.log('Message received:', data);
+                io.in(auctionRoom).emit('receive_message', data);
+            }
+
+            socket.on('join_room', (data) => {
+                const { userid, room } = data;
+                socket.join(room);
+
+                auctionRoom = room;
+                allBidders.push({ id: socket.id, userid, room });
+
+                socket.once('send-bid', sendBidHandler);
+                socket.once('send_message', sendMessageHandler);
+            });    
         
+        socket.on('disconnect', () => {
+            console.log('User disconnected:', socket.id);
+            socket.leave(auctionRoom);
+            socket.removeAllListeners();
+        });
     });
 }
