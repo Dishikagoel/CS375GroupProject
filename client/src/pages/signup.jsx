@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import AppBarr from '../components/appbar';
 import { Link } from 'react-router-dom';
 import {Helmet} from "react-helmet";
+import newUserSignup from './newUserScript.js';
 import { useEffect } from "react";
 
 const theme = createTheme({
@@ -19,6 +20,7 @@ const Signup = () => {
 
     const handleSignup = (event) => {
         event.preventDefault();
+        newUserSignup();
         // will add signup logic here
     };
 
@@ -55,7 +57,7 @@ const Signup = () => {
                                     </span>
                                 }
                             />
-                            <Button type="submit" variant="contained" fullWidth disabled={!userAgreement}>
+                            <Button onClick={handleSignup} type="submit" variant="contained" fullWidth disabled={!userAgreement}>
                                 Sign Up
                             </Button>
                         </Stack>

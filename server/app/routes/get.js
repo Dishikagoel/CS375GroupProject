@@ -53,8 +53,10 @@ router.get('/userinfo/:userId', (req, res) => {
 
 /*
 router.get('/userinfo', (req, res) => {
-    const userId = req.params.userId;
-    pool.query("SELECT * FROM userinfo")
+    let userPhone = req.params.phone;
+    let userEmail = req.params.email;
+    
+    pool.query("SELECT userid FROM userinfo WHERE phone = $1;", [userId])
         .then((result) => {
             const rows = result.rows;
             console.log(rows);
