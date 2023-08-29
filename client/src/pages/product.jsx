@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {Grid, Typography, CssBaseline, Paper, Card, CardContent, Divider,} from '@mui/material';
+import {Grid, Typography, CssBaseline, Paper, Card, CardContent, Divider, Button} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import Slider from 'react-slick';
@@ -18,14 +18,13 @@ const theme = createTheme({
 
 const Product = () => {
     const { auctionId } = useParams();
-    const [auctionDetails, setAuctionDetails] = useState(null);
+    const [productDetails, setProductDetails] = useState(null);
 
     useEffect(() => {
         axios
             .get(`http://localhost:3000/get/auction/${auctionId}`)
             .then((response) => {
-                console.log(response);
-                setAuctionDetails(response.data[0]);
+                setProductDetails(response.data[0]);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -45,12 +44,12 @@ const Product = () => {
             <CssBaseline />
             <AppBarr />
             <div style={{ padding: '20px' }}>
-                {auctionDetails ? (
+                {productDetails ? (
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            {auctionDetails.image_urls && auctionDetails.image_urls.length > 0 ? (
+                            {productDetails.image_urls && productDetails.image_urls.length > 0 ? (
                                 <Slider {...sliderSettings}>
-                                    {auctionDetails.image_urls.map((imageUrl, index) => (
+                                    {productDetails.image_urls.map((imageUrl, index) => (
                                         <div
                                             key={index}
                                             style={{
@@ -62,7 +61,7 @@ const Product = () => {
                                         >
                                             <img
                                                 src={imageUrl}
-                                                alt={auctionDetails.productname}
+                                                alt={productDetails.productname}
                                                 style={{
                                                     width: '100%',
                                                     maxHeight: '100%',
@@ -81,26 +80,26 @@ const Product = () => {
                         <Grid item xs={12} sm={6}>
                             <Paper elevation={3} style={{ padding: '20px', display: 'flex', flexDirection: 'column', height: '100%' }}>
                                 <Typography variant="h5" gutterBottom>
-                                    {auctionDetails.productname}
+                                    {productDetails.productname}
                                 </Typography>
                                 <Typography variant="body1" color="textSecondary" gutterBottom>
-                                    {auctionDetails.productdesc}
+                                    {productDetails.productdesc}
                                 </Typography>
                                 <Divider style={{ margin: '12px 0' }} />
                                 <Typography variant="body2">
-                                    Host: {auctionDetails.host}
+                                    Host: {productDetails.host}
                                 </Typography>
                                 <Typography variant="body2">
-                                    Minimum Bid: {auctionDetails.minbid}
+                                    Minimum Bid: ${productDetails.minbid}
                                 </Typography>
                                 <Typography variant="body2">
-                                    Auction Type: {auctionDetails.auctiontype}
+                                    Auction Type: {productDetails.auctiontype}
                                 </Typography>
                                 <Typography variant="body2">
-                                    Start Time: {auctionDetails.starttime}
+                                    Start Time: {new Date(productDetails.starttime).toLocaleString()}
                                 </Typography>
                                 <Typography variant="body2">
-                                    End Time: {auctionDetails.endtime}
+                                    End Time: {new Date(productDetails.endtime).toLocaleString()}
                                 </Typography>
                             </Paper>
                         </Grid>
@@ -110,6 +109,13 @@ const Product = () => {
                     <Typography variant="h6" color="textSecondary" align="center">
                         Loading auction details...
                     </Typography>
+                )}
+                {productDetails && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        <Button variant="contained" color="primary">
+                            Enter Auction
+                        </Button>
+                    </div>
                 )}
             </div>
         </ThemeProvider>
