@@ -56,8 +56,14 @@ app.use('/auction', auctionRouter);
 const newUserRouter = require('./routes/newUser');
 app.use('/newUser', newUserRouter);
 
+const newAuctionRouter = require('./routes/newAuction');
+app.use('/newAuction', newAuctionRouter);
+
 app.get('/', (req, res) => res.send());
 
 server.listen(port, hostname, () => {
     console.log(`Listening at: http://${hostname}:${port}`);
 })
+
+
+
