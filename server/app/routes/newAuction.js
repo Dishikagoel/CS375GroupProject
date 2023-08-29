@@ -7,18 +7,10 @@ const pool = new Pool(env);
 
 // GET /example/hello
 router.get("/add", (req, res) => {
-    console.log("yoh");
-    //res.sendFile(path.join(__dirname, '../public', 'newUser.html'));
-    //res.sendFile(path.join(__dirname, '../public', 'newUserScript.js'));
-    //console.log("account creation page\n");
-    //console.log("rand: ", rand())
 });
 
 router.get("/addAuction", (req, res) => {
     console.log("auction creation page\n");
-
-   // const date = new Date();
-   // const currentTime = date.getHours() + ':' + date.getMinutes() + ":" + date.getSeconds();
 
     let host = req.query.host;
     let auctionid = req.query.auctionid;
@@ -26,13 +18,13 @@ router.get("/addAuction", (req, res) => {
     let prodName = req.query.prodName;
     let prodDesc = req.query.prodDesc;
     let auctType = req.query.auctType;
-    //let start = currentTime;
     let start =  req.query.start;
     let end = req.query.end;
     let timePeriod = req.query.timePeriod;
     let active = req.query.active;
     let image = req.query.image;
 
+    /*
     console.log("host name: ", host);
     console.log("auction ID: ", auctionid);
     console.log("minimum bid: ", minBid);
@@ -44,6 +36,7 @@ router.get("/addAuction", (req, res) => {
     console.log("time period: ", timePeriod);
     console.log("active: ", active);
     console.log("image: ", image);
+    */
 
     pool.query(
         `INSERT INTO auction(host, auctionid, minbid, productname, productdesc, auctiontype, starttime, endtime, timeperiod, active, image_urls) 
@@ -54,7 +47,6 @@ router.get("/addAuction", (req, res) => {
         // row was successfully inserted into table
         console.log("Inserted:");
         console.log(result.rows);
-        console.log("i did it :)\n");
     }).catch((error) => {
         // something went wrong when inserting the row
         console.log(error);
