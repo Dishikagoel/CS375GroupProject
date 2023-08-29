@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Typography, TextField, Button, Stack, Paper } from '@mui/material';
+import { Container, Typography, TextField, Button, Stack, Paper, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 import AppBarr from '../components/appbar';
 import axios from 'axios';
+import {useNavigate} from "react-router-dom"
 
 const theme = createTheme({
     palette: {
@@ -16,17 +17,27 @@ const theme = createTheme({
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const [loginError, setLoginError] = useState(false);
 
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('localhost:3000/post/login', {
+            const response = await axios.post('http://localhost:3000/post/login', {
                 user: username,
                 pass: password,
             });
-            console.log(response.data.message);
+            console.log("res: ", response.data.message);
+            if (response.data.message === 'User not found' || response.data.message === 'Incorrect passowrd') {
+                setLoginError(true);
+                console.log("Login failed");
+            } else {
+                navigate("/dashboard");
+                console.log("Login successful");
+            }
         } catch (error) {
-            console.error('Error:', error);
+            setLoginError(true);
+            console.log('Error:', error);
         }
     };
 
@@ -65,6 +76,7 @@ const Login = () => {
                             </Button>
                         </Stack>
                     </form>
+                    {loginError && <Alert severity="error" className="error-box">Username or password is incorrect</Alert>}
                 </Paper>
             </Container>
             <style>
