@@ -18,7 +18,7 @@ router.post('/login', async (req, res) => {
     const userDb = rows[0];
 
     if (pass === userDb.password) {
-        return res.json({user: user, pass: pass});
+        return res.json({user: user});
     }
     res.status(401).json({message: 'Incorrect passowrd'});
 })
