@@ -90,16 +90,16 @@ const Product = () => {
                                     Host: {productDetails.host}
                                 </Typography>
                                 <Typography variant="body2">
-                                    Minimum Bid: {productDetails.minbid}
+                                    Minimum Bid: ${productDetails.minbid}
                                 </Typography>
                                 <Typography variant="body2">
                                     Auction Type: {productDetails.auctiontype}
                                 </Typography>
                                 <Typography variant="body2">
-                                    Start Time: {productDetails.starttime}
+                                    Start Time: {new Date(productDetails.starttime).toLocaleString()}
                                 </Typography>
                                 <Typography variant="body2">
-                                    End Time: {productDetails.endtime}
+                                    End Time: {new Date(productDetails.endtime).toLocaleString()}
                                 </Typography>
                             </Paper>
                         </Grid>
