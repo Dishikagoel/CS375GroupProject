@@ -34,7 +34,7 @@ function App() {
             <Route path="/newAuction" element={<NewAuction />} />
             <Route path="/userAgreement" element={<UserAgreement />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/product/:auctionid" element={<Product />} />
+            <Route path="/product/:auctionId" element={<Product />} />
             <Route path="/open-bid/:auctionID" element={
               <OpenBid 
                 socket={socket}
