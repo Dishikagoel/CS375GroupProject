@@ -1,9 +1,6 @@
-import { Paper, TextField, List, ListItem, ListItemText, Typography } from "@mui/material";
-import { useEffect, useState, useContext } from 'react';
+import { Paper, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { useEffect, useState } from 'react';
 import SendBid from './send-bid';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import UserContext from '../../components/UserContext';
 
 const leftColumnStyle = {
     padding: '16px', // Adjust as needed
@@ -33,7 +30,7 @@ const BidPanel = ({ socket, auctionID, bidders, isBidOpen, currentBidder, inputV
             setBid(bid);
             handleInputChange(currentBidderID, bid);
         };
-        socket.once('receive-bid', receiveBidHandler);
+        socket.on('receive-bid', receiveBidHandler);
 
         // Clean up the event listener when the component unmounts
         return () => {

@@ -2,8 +2,6 @@ import { Grid, Typography } from "@mui/material";
 import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import UserContext from '../../components/UserContext';
-// The following import is not being used, and was causing errors since the components/ThemeContext file doesnt exist
-// import { useThemeContext } from "../../components/ThemeContext";
 import AppBarr from '../../components/appbar';
 import BidPanel from "./bid-panel";
 import ChatArea from "./chat-area";

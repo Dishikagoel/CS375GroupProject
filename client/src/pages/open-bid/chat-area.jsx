@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Paper, TextField, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
-import UserContext from '../../components/UserContext';
 
 const chatAreaStyle = {
   maxHeight: '85vh',
@@ -37,9 +36,7 @@ const ChatArea = ({ socket, currentUser }) => {
   const currentUserID = currentUser.userid;
   const currentUserName = currentUser.firstname + ' ' + currentUser.lastname;
 
-  const testMessages = [
-    {userid: '401', sender: "me", message: 'I am fine'}
-  ];
+  const testMessages = [];
   const [messages, setMessages] = useState(testMessages);
   const [newMessage, setNewMessage] = useState('');
   const chatEndRef = useRef(null); // Ref for the bottom of the chat area
@@ -48,13 +45,13 @@ const ChatArea = ({ socket, currentUser }) => {
     if (newMessage.trim() !== '') {
       const newMessageObj = {userid: currentUserID, sender: currentUserName, message: newMessage};
       socket.emit('send_message', newMessageObj);
-      //setMessages([...messages, newMessageObj]);
       setNewMessage('');
     }
   };
 
   useEffect(() => {
     const receiveMessageHandler = (data) => {
+      console.log("Received message: ", data);
       setMessages((state) => [
           ...state, 
           {
@@ -64,7 +61,7 @@ const ChatArea = ({ socket, currentUser }) => {
           }
         ]);
     };
-    socket.once('receive_message', receiveMessageHandler);
+    socket.on('receive_message', receiveMessageHandler);
 
     // Remove event listener on component unmount
     return () => socket.off('receive_message', receiveMessageHandler);
