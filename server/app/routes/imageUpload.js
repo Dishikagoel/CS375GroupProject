@@ -45,8 +45,6 @@ router.post('/:auctionId', upload.array('images', 5), async (req, res) => {
         const query = "UPDATE auction SET image_urls = $1 WHERE auctionid = $2";
         await pool.query(query, [uploadedUrls, auctionId]);
 
-        console.log('Images uploaded:', uploadedUrls);
-
         res.status(200).json({
             message: 'Images uploaded successfully',
             uploadedUrls: uploadedUrls

@@ -73,7 +73,6 @@ router.get('/auction/:auctionid', (req, res) => {
         pool.query("SELECT * FROM auction WHERE auctionid = $1;", [auctionid])
             .then((result) => {
                 const rows = result.rows;
-                console.log(rows);
                 res.json(rows);
             })
             .catch((error) => {
