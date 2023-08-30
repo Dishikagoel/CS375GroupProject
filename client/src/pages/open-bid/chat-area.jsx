@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Paper, TextField, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
-import UserContext from '../../components/UserContext';
 
 const chatAreaStyle = {
   maxHeight: '85vh',
@@ -33,25 +32,40 @@ const senderNameStyle = {
   marginBottom: '4px',
 };
 
-const ChatArea = () => {
-  // Fetch current authenticated user
-  const currentUser = useContext(UserContext).currentUser;
+const ChatArea = ({ socket, currentUser }) => {
   const currentUserID = currentUser.userid;
+  const currentUserName = currentUser.firstname + ' ' + currentUser.lastname;
 
-  const testMessages = [
-    {userid: '401', sender: "me", message: 'I am fine'}, 
-    {userid: '402', sender: "test", message: 'Goodbye'},
-    {userid: '403', sender: "test", message: 'lorem ipsum It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using'}];
+  const testMessages = [];
   const [messages, setMessages] = useState(testMessages);
   const [newMessage, setNewMessage] = useState('');
   const chatEndRef = useRef(null); // Ref for the bottom of the chat area
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
-      setMessages([...messages, {userid: currentUserID, sender: "me", message: newMessage}]);
+      const newMessageObj = {userid: currentUserID, sender: currentUserName, message: newMessage};
+      socket.emit('send_message', newMessageObj);
       setNewMessage('');
     }
   };
+
+  useEffect(() => {
+    const receiveMessageHandler = (data) => {
+      console.log("Received message: ", data);
+      setMessages((state) => [
+          ...state, 
+          {
+            userid: data.userid,
+            sender: data.sender,
+            message: data.message
+          }
+        ]);
+    };
+    socket.on('receive_message', receiveMessageHandler);
+
+    // Remove event listener on component unmount
+    return () => socket.off('receive_message', receiveMessageHandler);
+}, [socket]);
 
   useEffect(() => {
     // Scroll to the bottom when messages change
