@@ -1,9 +1,12 @@
 import { Container, Typography, TextField, Button, Stack, Paper, FormControlLabel, Checkbox } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+//import { useEffect } from 'react';
 import AppBarr from '../components/appbar';
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import newUserSignup from './newUserScript';
 
 const theme = createTheme({
     palette: {
@@ -17,6 +20,39 @@ const Signup = () => {
 
     const handleSignup = (event) => {
         event.preventDefault();
+        const getFirst = document.getElementById("first").value;
+        const getLast = document.getElementById("last").value;
+        const getEmail = document.getElementById("email").value;
+        const getPassword1 = document.getElementById("password1").value;
+        const getPassword2 = document.getElementById("password2").value;
+        const getPhone = document.getElementById("phone").value;
+        const getDob = document.getElementById("dob").value;
+        const getAddress = document.getElementById("address").value;
+
+        console.log("first from signup: ", getFirst);
+
+        let url = `http://localhost:3000/newUser/addUser`;
+        //console.log(url);
+        //let url = `/addUser?first=${getFirst}&last=${getLast}&email=${getEmail}&phone=${getPhone}&dob=${getDob}&password=${getPassword1}`;
+        axios.get(url, {
+            params: {
+                first: getFirst,
+                last: getLast,
+                email: getEmail,
+                phone: getPhone,
+                dob: getDob,
+                address: getAddress
+            }
+        }).then(response => response.json()).then(body => {
+            console.log("Success");
+        }).catch((error) => {
+            // something went wrong when inserting the row
+            //console.log(error);
+            console.log("Error in signup.jsx");
+        });
+    
+
+        //newUserSignup;
         // will add signup logic here
     };
 
@@ -33,11 +69,14 @@ const Signup = () => {
                     </Typography>
                     <form onSubmit={handleSignup}>
                         <Stack spacing={2}>
-                            <TextField label="Full Name" variant="outlined" required fullWidth />
-                            <TextField label="Email" type="email" variant="outlined" required fullWidth />
-                            <TextField label="Password" type="password" variant="outlined" required fullWidth />
-                            <TextField label="Confirm Password" type="password" variant="outlined" required fullWidth />
-                            <TextField label="Phone Number" type="tel" variant="outlined" fullWidth />
+                            <TextField id="first" label="First Name" variant="outlined" required fullWidth />                        
+                            <TextField id="last" label="Last Name" variant="outlined" required fullWidth />
+                            <TextField id="email" label="Email" type="email" variant="outlined" required fullWidth />
+                            <TextField id="password1" label="Password" type="password" variant="outlined" required fullWidth />
+                            <TextField id="password2" label="Confirm Password" type="password" variant="outlined" required fullWidth />
+                            <TextField id="phone" label="Phone Number" type="tel" variant="outlined" fullWidth />
+                            <TextField id="dob" label="Date of Birth" type="date" variant="outlined" fullWidth />
+                            <TextField id="address" label="Address" variant="outlined" required fullWidth />
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -53,7 +92,7 @@ const Signup = () => {
                                     </span>
                                 }
                             />
-                            <Button type="submit" variant="contained" fullWidth disabled={!userAgreement}>
+                            <Button onClick={handleSignup} type="submit" variant="contained" fullWidth disabled={!userAgreement}>
                                 Sign Up
                             </Button>
                         </Stack>
