@@ -29,11 +29,7 @@ const Signup = () => {
         const getDob = document.getElementById("dob").value;
         const getAddress = document.getElementById("address").value;
 
-        console.log("first from signup: ", getFirst);
-
         let url = `http://localhost:3000/newUser/addUser`;
-        //console.log(url);
-        //let url = `/addUser?first=${getFirst}&last=${getLast}&email=${getEmail}&phone=${getPhone}&dob=${getDob}&password=${getPassword1}`;
         axios.get(url, {
             params: {
                 first: getFirst,
@@ -47,13 +43,9 @@ const Signup = () => {
             console.log("Success");
         }).catch((error) => {
             // something went wrong when inserting the row
-            //console.log(error);
+            console.log(error);
             console.log("Error in signup.jsx");
         });
-    
-
-        //newUserSignup;
-        // will add signup logic here
     };
 
     return (

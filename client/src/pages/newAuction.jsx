@@ -50,10 +50,63 @@ const NewAuction = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const formData = new FormData();
+        const form = document.getElementById("form");
+        const submitter = document.querySelector("button[value=save]");
+        const formData = new FormData(form, submitter);
+        formData.append("host", "fLOSs");
+        //console.log(formData.get("host"));
         images.forEach(image => {
             formData.append('images', image);
         });
+
+        /*let getHost = "fLOSs";
+        let getauctionID = "007";
+                        let getminBid = document.getElementsByName("minBid").value;
+                        let getprodName = document.getElementByName("prodName").value;
+                        let getprodDesc = document.getElementById("prodDesc").value;
+                        let getauctType = document.getElementById("first").value;
+                        let getDate = document.getElementById("auctionDate").value;
+                        let getstart =  document.getElementById("startTime").value;
+                        //combine date and times
+                        let getend = document.getElementById("endTime").value;
+                        let gettimePeriod = document.getElementById("timePeriod").value;
+                        let getactive = true;
+                        let getimages= [];
+
+                        console.log(getHostname);
+                        console.log(getauctionID);
+                        console.log(getminBid);
+                        console.log(getprodName);
+                        console.log(getprodDesc);
+                        console.log(getauctType);
+                        console.log(getstart);
+                        console.log(getend);
+                        console.log(gettimePeriod);
+                        console.log(getactive);
+                        console.log(getimages);
+                        */
+                
+                        
+                        let myUrl = `http://localhost:3000/newAuction/addAuction`;
+                        axios.post(myUrl, {
+                            host: "hostid",
+                            title: title,
+                            minBid: minimumBid,
+                            //auctionID: auctionID,
+                            prodDesc: description,
+                            auctType: auctionType,
+                            start: "2023-08-12 13:00:00",
+                            end: "2023-08-12 14:00:00",
+                            timePeriod: timePeriod,
+                            active: true
+                
+                        }).then(response => response.json()).then(body => {
+                            console.log("Success");
+                        }).catch((error) => {
+                            // something went wrong when inserting the row
+                            console.log(error);
+                            console.log("Error in newAuction.jsx");
+                        });
 
         try {
             // This url is for development only. When deploy, change it to "/get/auctionBidders/${auctionID}"
@@ -65,13 +118,16 @@ const NewAuction = () => {
 
             if (response.status === 200) {
                 if (images.length > 0) {
+
                     console.log('Images uploaded successfully');
+                    
                 }
                 setIsSubmitted(true);
             } else {
                 console.error('Failed to upload images');
             }
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('Error uploading images:', error);
         }
     };
@@ -154,10 +210,11 @@ const NewAuction = () => {
                             <Typography variant="h4" color="textPrimary" align="center" gutterBottom>
                                 Create a New Auction
                             </Typography>
-                            <form onSubmit={handleSubmit}>
+                            <form id="form" onSubmit={handleSubmit}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
+                                            name="prodName"
                                             label="Product Name"
                                             variant="outlined"
                                             required
@@ -168,6 +225,7 @@ const NewAuction = () => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                            name="prodDesc"
                                             label="Product Description"
                                             variant="outlined"
                                             required
@@ -217,6 +275,7 @@ const NewAuction = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
+                                            name="phone"
                                             label="Phone Number"
                                             variant="outlined"
                                             fullWidth
@@ -227,6 +286,7 @@ const NewAuction = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
+                                            name="email"
                                             label="Email"
                                             type="email"
                                             variant="outlined"
@@ -239,6 +299,7 @@ const NewAuction = () => {
                                     <Grid item xs={12} sm={6}>
                                         <InputLabel>Auction Date *</InputLabel>
                                         <TextField
+                                            name="date"
                                             type="date"
                                             variant="outlined"
                                             fullWidth
@@ -255,6 +316,7 @@ const NewAuction = () => {
                                                 required
                                                 onChange={(e) => setAuctionType(e.target.value)}
                                                 label="Auction Type"
+                                                name="auctType"
                                             >
                                                 <MenuItem value="First-Bid Sealed">First-Bid Sealed</MenuItem>
                                                 <MenuItem value="Second-Bid Sealed">Second-Bid Sealed</MenuItem>
@@ -265,6 +327,7 @@ const NewAuction = () => {
                                     <Grid item xs={12} sm={6} mb={2}>
                                         <InputLabel>Auction Start Time *</InputLabel>
                                         <TextField
+                                            name="start"
                                             type="time"
                                             variant="outlined"
                                             fullWidth
@@ -276,6 +339,7 @@ const NewAuction = () => {
                                     <Grid item xs={12} sm={6} mb={2}>
                                         <InputLabel>Auction End Time *</InputLabel>
                                         <TextField
+                                            name="end"
                                             type="time"
                                             variant="outlined"
                                             fullWidth
@@ -286,6 +350,7 @@ const NewAuction = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6} mb={2}>
                                         <TextField
+                                            name="minBid"
                                             label="Minimum Bid (USD)"
                                             type="number"
                                             variant="outlined"
@@ -297,6 +362,7 @@ const NewAuction = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6} mb={2}>
                                         <TextField
+                                            name="timePeriod"
                                             label="Time Period (minutes)"
                                             variant="outlined"
                                             fullWidth
@@ -310,7 +376,9 @@ const NewAuction = () => {
                                     </Grid>
                                     <Grid item xs={12} mb={2}>
                                         <Button
+                                            onClick={handleSubmit}
                                             type="submit"
+                                            value="save"
                                             variant="contained"
                                             color="primary"
                                             fullWidth
