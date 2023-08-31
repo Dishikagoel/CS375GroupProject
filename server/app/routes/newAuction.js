@@ -22,27 +22,13 @@ router.post("/addAuction", (req, res) => {
     let end = req.body.end;
     let timePeriod = req.body.timePeriod;
     let active = req.body.active;
-    //let images = req.body.image;
-
-    
-    console.log("host name: ", host);
-    console.log("auction ID: ", auctionid);
-    console.log("minimum bid: ", minBid);
-    console.log("product name: ", prodName);
-    console.log("product description: ", prodDesc);
-    console.log("auction Type: ", auctType);
-    console.log("start time: ", start);
-    console.log("end time: ", end);
-    console.log("time period: ", timePeriod);
-    console.log("active: ", active);
-    //console.log("image: ", image);
-    
+    let images = req.body.imagesList;
 
     pool.query(
         `INSERT INTO auction(host, auctionid, minbid, productname, productdesc, auctiontype, starttime, endtime, timeperiod, active, image_urls) 
         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING *`,
-        [host, auctionid, minBid, prodName, prodDesc, auctType, start, end, timePeriod, true, null]
+        [host, auctionid, minBid, prodName, prodDesc, auctType, start, end, timePeriod, true, images]
     ).then((result) => {
         // row was successfully inserted into table
         console.log(result.rows)
