@@ -19,17 +19,32 @@ const theme = createTheme({
 const Product = () => {
     const { auctionId } = useParams();
     const [productDetails, setProductDetails] = useState(null);
+    const [currentTime, setCurrentTime] = useState(new Date());
+    const [startTime, setStartTime] = useState(new Boolean());
+    const [endTime, setEndTime] = useState(new Boolean());
 
     useEffect(() => {
         axios
             .get(`http://localhost:3000/get/auction/${auctionId}`)
             .then((response) => {
                 setProductDetails(response.data[0]);
+                setStartTime(response.data[0].starttime)
+                setEndTime(response.data[0].endtime)
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
     }, [auctionId]);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
 
     const sliderSettings = {
         dots: true,
@@ -38,6 +53,8 @@ const Product = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
     };
+    const isAuctionActive = currentTime >= new Date(startTime) && currentTime <= new Date(endTime);
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -111,10 +128,32 @@ const Product = () => {
                     </Typography>
                 )}
                 {productDetails && (
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                        <Button variant="contained" color="primary">
-                            Enter Auction
-                        </Button>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+                        {currentTime < new Date(productDetails.starttime) && (
+                            <Typography variant="body2" color="error" style={{ marginBottom: '10px' }}>
+                                This auction has not started yet.
+                            </Typography>
+                        )}
+                        {currentTime > new Date(productDetails.endtime) && (
+                            <Typography variant="body2" color="error" style={{ marginBottom: '10px' }}>
+                                This auction has already ended.
+                            </Typography>
+                        )}
+                        {isAuctionActive ? (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                    window.location.href = `/open-bid/${auctionId}`;
+                                }}
+                            >
+                                Enter Bidding
+                            </Button>
+                        ) : (
+                            <Button variant="contained" color="primary" disabled>
+                                Enter Bidding
+                            </Button>
+                        )}
                     </div>
                 )}
             </div>
