@@ -42,7 +42,7 @@ router.post('/:auctionId', upload.array('images', 5), async (req, res) => {
         const uploadedUrls = uploadedFiles.map(file => file.location);
         const auctionId = req.params.auctionId;
 
-        const query = "UPDATE auction SET image_urls = $1 WHERE auctionid = $2";
+        const query = "INSERT INTO auction(image_urls, auctionid)  VALUES ($1,$2)";
         await pool.query(query, [uploadedUrls, auctionId]);
 
         console.log('Images uploaded:', uploadedUrls);

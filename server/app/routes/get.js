@@ -25,7 +25,6 @@ router.get('/auction', (req, res) => {
     pool.query("SELECT * FROM auction WHERE active = true;")
         .then((result) => {
             const rows = result.rows;
-            console.log(rows);
             res.json(rows);
         })
         .catch((error) => {
@@ -42,7 +41,6 @@ router.get('/userinfo/:userId', (req, res) => {
     pool.query("SELECT * FROM userinfo WHERE userid = $1;", [userId])
         .then((result) => {
             const rows = result.rows;
-            console.log(rows);
             res.json(rows);
         })
         .catch((error) => {
@@ -59,7 +57,6 @@ router.get('/bid/:auctionid', (req, res) => {
     pool.query("SELECT * FROM bid b, auction a WHERE b.auctionid = $1 AND a.auctionid = $1;", [auctionid])
         .then((result) => {
             const rows = result.rows;
-            console.log(rows);
             res.json(rows);
         })
         .catch((error) => {
@@ -76,7 +73,6 @@ router.get('/auction/:auctionid', (req, res) => {
         pool.query("SELECT * FROM auction WHERE auctionid = $1;", [auctionid])
             .then((result) => {
                 const rows = result.rows;
-                console.log(rows);
                 res.json(rows);
             })
             .catch((error) => {
@@ -94,7 +90,6 @@ router.get('/bid/:auctionid/:userid', (req, res) => {
     pool.query("SELECT * FROM bid WHERE auctionid = $1 AND userid = $2;", [auctionid, userid])
         .then((result) => {
             const rows = result.rows;
-            console.log(rows);
             res.json(rows);
         })
         .catch((error) => {

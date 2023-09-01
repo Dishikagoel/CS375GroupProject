@@ -13,8 +13,17 @@ const theme = createTheme({
     },
 });
 
+function rand() {
+    let chars = '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ';
+    let result = '';
+    for (let i = 0; i < 5; i++) {
+        result += chars[(Math.floor(Math.random() * chars.length))];
+    }
+    return result;
+}
+
 const NewAuction = () => {
-    const { auctionID } = useParams();
+    const auctionID = rand();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [images, setImages] = useState([]);
@@ -51,13 +60,12 @@ const NewAuction = () => {
         event.preventDefault();
 
         const formData = new FormData();
-        let imageList;
         images.forEach(image => {
             formData.append('images', image);
         });
                                                                 
         try {
-            // This url is for development only. When deploy, change it to "/get/auctionBidders/${auctionID}"
+            // This url is for development only. When deploy, change it to "/upload/${auctionID}"
             const response = await axios.post(`http://localhost:3000/upload/${auctionID}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -67,7 +75,6 @@ const NewAuction = () => {
             if (response.status === 200) {
                 if (images.length > 0) {
                     console.log('Images uploaded successfully');
-                    imageList = response.data.uploadedUrls;
                 }
                 setIsSubmitted(true);
             } else {
@@ -84,19 +91,16 @@ const NewAuction = () => {
             host: "hostid",
             title: title,
             minBid: minimumBid,
+            auctionid: auctionID,
             prodDesc: description,
             auctType: auctionType,
             start: "2023-08-12 13:00:00",
             end: "2023-08-12 14:00:00",
             timePeriod: timePeriod,
             active: true,
-            imagesList: imageList
         }).then(response => response.json()).then(body => {
-            //console.log("Success");
         }).catch((error) => {
-            // something went wrong when inserting the row
             console.log(error);
-            //console.log("Error in newAuction.jsx");
         });
     };
 
