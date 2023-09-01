@@ -16,6 +16,7 @@ const theme = createTheme({
 
 const Signup = () => {
     const [userAgreement, setUserAgreement] = useState(false);
+    const [signupSuccess, setSignupSuccess] = useState(false);
 
     const handleSignup = (event) => {
         event.preventDefault();
@@ -45,6 +46,7 @@ const Signup = () => {
             console.log(error);
             console.log("Error in signup.jsx");
         });
+        setSignupSuccess(true);
     };
 
     return (
@@ -58,6 +60,11 @@ const Signup = () => {
                     <Typography variant="subtitle2" color="textSecondary" gutterBottom style={{ textAlign: 'center' }}>
                         Already have a WeBay account? <Link to="/login">Log In</Link>
                     </Typography>
+                    {signupSuccess ? (
+                        <div>
+                            <h2>Signup Successful!</h2>
+                        </div>
+                    ) : (
                     <form onSubmit={handleSignup}>
                         <Stack spacing={2}>
                             <TextField id="first" label="First Name" variant="outlined" required fullWidth />                        
@@ -88,6 +95,7 @@ const Signup = () => {
                             </Button>
                         </Stack>
                     </form>
+                        )}
                 </Paper>
             </Container>
             <style>

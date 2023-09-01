@@ -19,7 +19,6 @@ const Home = () => {
 
     useEffect(() => {
         axios.get(url).then((res) => {
-            console.log(res.data);
             setAuctions(res.data);
         });
     }, []);
