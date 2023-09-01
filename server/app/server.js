@@ -46,6 +46,12 @@ app.use('/example', exampleRouter);
 const getRouter = require('./routes/get');
 app.use('/get', getRouter);
 
+const newUserRouter = require('./routes/newUser');
+app.use('/newUser', newUserRouter);
+
+const newAuctionRouter = require('./routes/newAuction');
+app.use('/newAuction', newAuctionRouter);
+
 const postRouter = require('./routes/post');
 app.use('/post', postRouter);
 const imageUploadRouter = require('./routes/imageUpload');
