@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react';
 import AppBarr from '../components/appbar';
 import { Link } from 'react-router-dom';
 import axios from "axios";
-import newUserSignup from './newUserScript';
 
 const theme = createTheme({
     palette: {
