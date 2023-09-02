@@ -18,15 +18,15 @@ router.get("/addUser", (req, res) => {
     let Uemail = req.query.email;
     let Uphone = req.query.phone;
     let Udob = req.query.dob;
-    //let Uhash = req.query.password;
+    let Upassword = req.query.password;
     let Uid =  rand();
     let Uaddress = req.query.address;
 
     pool.query(
-        `INSERT INTO userInfo(userid, email, firstname, lastname, dob, phone, address, strikes) 
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+        `INSERT INTO userInfo(userid, email, firstname, lastname, dob, phone, address, strikes, password) 
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *`,
-        [Uid, Uemail, Ufirst, Ulast, Udob, Uphone, Uaddress, 0]
+        [Uid, Uemail, Ufirst, Ulast, Udob, Uphone, Uaddress, 0, Upassword]
     ).then((result) => {
     }).catch((error) => {
         // something went wrong when inserting the row
