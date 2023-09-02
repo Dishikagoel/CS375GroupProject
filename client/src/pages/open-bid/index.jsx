@@ -9,10 +9,11 @@ import CountdownTimer from "../../components/Countdown";
 import axios from 'axios';
 
 const OpenBid = ({ socket }) => {
-    const [isBidOpen, setIsBidOpen] = useState(true);
+    const [isBidOpen, setIsBidOpen] = useState(false);
     const [isAuctionEnded, setIsAuctionEnded] = useState(false);
     const [countdown, setCountdown] = useState();
     const { auctionID } = useParams();
+    const [timeMessage, setTimeMessage] = useState('');
 
     const [currentBidder, setCurrentBidder] = useState({});
     const [inputValues, setInputValues] = useState({});
@@ -30,12 +31,28 @@ const OpenBid = ({ socket }) => {
         .then(res => {
             let starttime = new Date(res.data[0].starttime);
             let endtime = new Date(res.data[0].endtime);
-            
-            let duration = (endtime - starttime) / 1000; // in seconds
-            console.log(duration);
-            setCountdown(duration);
-        })
-    }, []);
+
+            let currentTime = new Date();
+            if (currentTime < starttime) {
+                // bidding is not open yet
+                setIsBidOpen(false);
+                let duration = (starttime - currentTime) / 1000; // in seconds
+                setCountdown(duration);
+                setTimeMessage('Time until bidding starts');
+            } else if (currentTime > endtime) { 
+                // bidding is closed
+                setIsBidOpen(false);
+                setIsAuctionEnded(true);
+                setCountdown(0);
+            } else {
+                // bidding is open
+                setIsBidOpen(true);
+                let duration = (endtime - currentTime) / 1000; // in seconds
+                setCountdown(duration);
+                setTimeMessage('Remaining bidding time');
+            }
+        });
+    }, [isBidOpen]);
 
     useEffect(() => {
         axios.get(url)
@@ -58,12 +75,6 @@ const OpenBid = ({ socket }) => {
 
     socket.emit('join_room', { userid: currentUserID, room: auctionID });
 
-    // Set isAuctionEnded to true when countdown reaches 0 and isBidOpen is false
-    useEffect(() => {
-        if (countdown === 0 && !isBidOpen) {
-            setIsAuctionEnded(true);
-        }
-    }, [countdown, isBidOpen]);
 
     // Send bid to server when isAuctionEnded is true
     useEffect(() => {
@@ -96,8 +107,14 @@ const OpenBid = ({ socket }) => {
                     />
                 </Grid>
                 <Grid item xs={8}>
-                    <CountdownTimer countdown={countdown} setCountdown={setCountdown} trigger={isBidOpen} setTrigger={setIsBidOpen} />
-                    <Typography align="center" variant="h5">{isBidOpen ? "Bidding is opended" : "Bidding is closed"}</Typography>
+                    <CountdownTimer 
+                        timeMessage={timeMessage}
+                        countdown={countdown} 
+                        setCountdown={setCountdown} 
+                        trigger={isBidOpen} 
+                        setTrigger={setIsBidOpen} 
+                    />
+                    <Typography align="center" variant="h5">{isAuctionEnded ? "Bidding has ended" : !isBidOpen ? "Bidding hasn't started yet" : "Bidding is open. You might need to refresh the page."}</Typography>
                     <ChatArea 
                         socket={socket}
                         currentUser={currentUser}
