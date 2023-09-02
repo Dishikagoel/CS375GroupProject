@@ -66,7 +66,6 @@ router.post("/submit-bids", async (req, res) => {
 
         if (userBidMap) {
             const rankings = decideWinner(userBidMap, auctionType);
-            console.log("Rankings: ", rankings);
 
             const updateQuery = `UPDATE bid SET ranking = $1 WHERE userid = $2 AND auctionid = $3`;
             for (let userid in rankings) {

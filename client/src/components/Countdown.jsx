@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
 
-const CountdownTimer = ({ countdown, setCountdown, trigger, setTrigger }) => {
+const CountdownTimer = ({ timeMessage, countdown, setCountdown, trigger, setTrigger }) => {
     
      useEffect(() => {
         let newtime = countdown;
@@ -24,14 +24,16 @@ const CountdownTimer = ({ countdown, setCountdown, trigger, setTrigger }) => {
      const formatTime = (time) => {
         const hours = Math.floor(time / 3600);
         const minutes = Math.floor((time - hours * 3600) / 60);
-        const seconds = time - hours * 3600 - minutes * 60;     
+        const seconds = Math.floor(time - hours * 3600 - minutes * 60); // Remove milliseconds
 
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        const newTimeFormat = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        return newTimeFormat;
      }
 
      return (
         <Typography variant="h4" component="h4" gutterBottom>
-            Time remaining: {formatTime(countdown)}
+            {timeMessage}: {formatTime(countdown)}
         </Typography>
      )
 }
