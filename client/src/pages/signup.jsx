@@ -1,4 +1,4 @@
-import { Container, Typography, TextField, Button, Stack, Paper, FormControlLabel, Checkbox } from '@mui/material';
+import { Container, Typography, TextField, Button, Stack, Paper, FormControlLabel, Checkbox, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan, purple } from '@mui/material/colors';
 import React, { useState, useEffect } from 'react';
@@ -17,6 +17,7 @@ const theme = createTheme({
 const Signup = () => {
     const [userAgreement, setUserAgreement] = useState(false);
     const [signupSuccess, setSignupSuccess] = useState(false);
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
 
     const handleSignup = (event) => {
         event.preventDefault();
@@ -29,6 +30,14 @@ const Signup = () => {
         const getDob = document.getElementById("dob").value;
         const getAddress = document.getElementById("address").value;
 
+        if (getPassword1 !== getPassword2) {
+            // Passwords do not match, show an error message or handle as needed
+            setPasswordsMatch(false);
+            return;
+        }
+
+        setPasswordsMatch(true);
+
         let url = `http://localhost:3000/newUser/addUser`;
         axios.get(url, {
             params: {
@@ -37,7 +46,8 @@ const Signup = () => {
                 email: getEmail,
                 phone: getPhone,
                 dob: getDob,
-                address: getAddress
+                address: getAddress,
+                password: getPassword2
             }
         }).then(response => response.json()).then(body => {
             console.log("Success");
@@ -75,6 +85,9 @@ const Signup = () => {
                             <TextField id="phone" label="Phone Number" type="tel" variant="outlined" fullWidth />
                             <TextField id="dob" label="Date of Birth" type="date" variant="outlined" fullWidth />
                             <TextField id="address" label="Address" variant="outlined" required fullWidth />
+                            {passwordsMatch ? null : (
+                                <Alert severity="error">Passwords do not match.</Alert>
+                            )}
                             <FormControlLabel
                                 control={
                                     <Checkbox

@@ -15,7 +15,7 @@ const theme = createTheme({
 });
 
 const Login = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [loginError, setLoginError] = useState(false);
@@ -24,7 +24,7 @@ const Login = () => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/post/login', {
-                user: username,
+                email: email,
                 pass: password,
             });
             console.log("res: ", response.data.message);
@@ -55,12 +55,12 @@ const Login = () => {
                     <form onSubmit={handleLogin}>
                         <Stack spacing={2}>
                             <TextField
-                                label="Username"
+                                label="Email"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                             <TextField
                                 label="Password"
@@ -76,7 +76,7 @@ const Login = () => {
                             </Button>
                         </Stack>
                     </form>
-                    {loginError && <Alert severity="error" className="error-box">Username or password is incorrect</Alert>}
+                    {loginError && <Alert severity="error" className="error-box">Email or password is incorrect</Alert>}
                 </Paper>
             </Container>
             <style>
