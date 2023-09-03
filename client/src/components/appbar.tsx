@@ -17,9 +17,9 @@ function AppBarr() {
     return (
         <AppBar position="relative" color="primary">
             <Toolbar>
-                <Button color="inherit" onClick={() => navigate('/')}>WeBay</Button>
                 {isLoggedIn ? (
                     <React.Fragment>
+                        <Button color="inherit" onClick={() => navigate('/dashboard')}>WeBay</Button>
                         <Button color="inherit" onClick={() => navigate('/userInfo')}>
                             <AccountCircle />
                         </Button>
@@ -27,7 +27,7 @@ function AppBarr() {
                             Logout
                         </Button>
                     </React.Fragment>
-                ) : null}
+                ) : <Button color="inherit" onClick={() => navigate('/')}>WeBay</Button>}
             </Toolbar>
         </AppBar>
     );
