@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const transporter = require('../mailer');
 
 function decideWinner(userBidMap, auctionType) {
     let sortedBids = Object.keys(userBidMap).sort((a, b) => userBidMap[b] - userBidMap[a]);
@@ -47,22 +48,52 @@ async function getUserBidMap(auctionid) {
     }
 }
 
-async function getAuctionType(auctionid) {
+async function getAuctionInfo(auctionid) {
     try {
-        const result = await pool.query("SELECT auctiontype FROM auction WHERE auctionid = $1;", [auctionid]);
+        const result = await pool.query("SELECT * FROM auction WHERE auctionid = $1;", [auctionid]);
         const rows = result.rows;
-        return rows[0].auctiontype;
+        if (rows.length > 0) {
+            return rows[0];
+        } else {
+            return null;
+        }
     } catch (error) {
         console.error("Error querying database:", error);
-        return "";
+        return null;
     }
 }
+
+async function getUserInfo(userid) {
+    try {
+        const result = await pool.query("SELECT * FROM userinfo WHERE userid = $1;", [userid]);
+        const rows = result.rows;
+        if (rows.length > 0) {
+            console.log("Found user:", rows);
+            return rows[0];
+        } else {
+            console.log("User not found for userid:", userid);
+            return null;
+        }
+    } catch (error) {
+        console.error("Error querying database:", error);
+        return null;
+    }
+}
+
 
 router.post("/submit-bids", async (req, res) => {
     try {
         const auctionid = req.body.auctionid;
         const userBidMap = await getUserBidMap(auctionid);
-        const auctionType = await getAuctionType(auctionid);
+        const auctionInfo = await getAuctionInfo(auctionid);
+        const auctionType = auctionInfo.auctiontype;
+        const productName = auctionInfo.productname;
+        const productDesc = auctionInfo.productdesc;
+        const hostName = auctionInfo.host;
+        const hostInfo = await getUserInfo(auctionInfo.userid);
+        const hostEmail = hostInfo.email;
+        const hostPhone = hostInfo.phone;
+        const productUrl = `/product/${auctionid}`
 
         if (userBidMap) {
             const rankings = decideWinner(userBidMap, auctionType);
@@ -72,9 +103,47 @@ router.post("/submit-bids", async (req, res) => {
                 const ranking = rankings[userid].rank;
                 await pool.query(updateQuery, [ranking, userid, auctionid]);
             }
-        }
 
-        // FUTURE: Send notification to winner
+            // Get the winner info based on their ID
+            const winnerUserId = Object.keys(rankings).filter((userId) => rankings[userId].rank === 0)[0];
+            const winnerInfo = await getUserInfo(winnerUserId);
+            const winnerEmail = winnerInfo.email;
+
+            // Compose and send the email to the winner
+            const mailOptions = {
+                from: 'webay524@gmail.com',
+                to: winnerEmail,
+                subject: 'Congratulations! You Won the Auction!',
+                html: `
+                    <div style="background-color: #f0f0f0; padding: 20px; text-align: center;" xmlns="http://www.w3.org/1999/html">
+                        <h1>Congratulations! You Won the Auction!</h1>
+                        <div style="background-color: white; border: 3px solid #ddd; padding: 10px; margin-top: 10px;">
+                            <h2>Auction Details</h2>
+                            <p><strong>Auction ID:</strong> ${auctionid}</p
+                            <p><strong>Host Name:</strong> ${hostName}</p
+                            <p><strong>Product Name:</strong> ${productName}</p>
+                            <p><strong>Product Description:</strong> ${productDesc}</p>
+                            <p><strong>Auction Type:</strong> ${auctionType}</p>
+                            </div>
+                            <div style="background-color: white; border: 3px solid #ddd; padding: 10px; margin-top: 10px;">
+                            <p><strong>For information on payment and delivery methods please contact the host at:</strong></p>
+                             <p><strong>Phone: </strong> ${hostPhone}</p>
+                             <p><strong>Email: </strong> ${hostEmail}</p>
+                            <a href="${productUrl}" target="_blank">View Product</a>
+                        </div>
+                        <p style="font-size: 12px; margin-top: 20px;">Thank you for participating in our auction!</p>
+                    </div>
+                `,
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log('Email could not be sent:', error);
+                } else {
+                    console.log(`Email sent to: userid: ${winnerUserId}\n`);
+                }
+            });
+        }
 
         return res.send("hi");
     } catch (error) {
