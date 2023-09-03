@@ -27,11 +27,13 @@ const Login = () => {
                 email: email,
                 pass: password,
             });
-            console.log("res: ", response.data.message);
+            console.log("res: ", response.data.userId);
             if (response.data.message === 'User not found' || response.data.message === 'Incorrect passowrd') {
                 setLoginError(true);
                 console.log("Login failed");
             } else {
+                const userId = response.data.userId;
+                localStorage.setItem('userId', userId);
                 navigate("/dashboard");
                 console.log("Login successful");
             }

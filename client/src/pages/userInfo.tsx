@@ -2,9 +2,10 @@ import { Typography, AppBar, CssBaseline, Container, Toolbar, CardContent, Tabs,
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import { cyan, purple } from '@mui/material/colors';
-import * as React from 'react';
 import AppBarr from '../components/appbar';
 import {Link} from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const theme = createTheme({
     palette: {
@@ -88,6 +89,21 @@ return (
 
 
 const UserInfo = () => {
+    const userId = localStorage.getItem('userId'); 
+    const [firstName, setFirstName] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/get/userinfo/${userId}`)
+            .then((response) => {
+                const userData = response.data[0]; 
+                const userFirstName = userData.firstname;
+                setFirstName(userFirstName); 
+            })
+            .catch((error) => {
+                console.log('Error:', error);
+            });
+    }, [userId]);
+    
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -98,7 +114,7 @@ const UserInfo = () => {
                     <Paper elevation={3} sx={{ padding: 3, marginTop: 5 }}>
                         <CardContent sx={{ marginBottom: 3 }}>
                             <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
-                                Hello "user name"
+                                {firstName ? `Hello ${firstName}!` : `Hello ${userId}`}
                             </Typography>
                             <BasicTabs />
                             </CardContent>

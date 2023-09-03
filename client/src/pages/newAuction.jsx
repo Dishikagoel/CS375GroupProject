@@ -55,6 +55,24 @@ const NewAuction = () => {
         setImages(prevImages => [...prevImages, ...newImages]);
     };
 
+    const userId = localStorage.getItem('userId'); 
+    const [firstName, setFirstName] = useState(null);
+    const [lastName, setLastName] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/get/userinfo/${userId}`)
+            .then((response) => {
+                const userData = response.data[0]; 
+                const userFirstName = userData.firstname;
+                const userLastName = userData.lastname;
+                setFirstName(userFirstName); 
+                setLastName(userLastName); 
+
+            })
+            .catch((error) => {
+                console.log('Error:', error);
+            });
+    }, [userId]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -86,9 +104,12 @@ const NewAuction = () => {
             console.error('Error uploading images:', error);
         }
 
+        const name = firstName + " " + lastName;
+
         let myUrl = `http://localhost:3000/newAuction/addAuction`;
         axios.post(myUrl, {
-            host: "hostid",
+            host: name,
+            userid: userId,
             title: title,
             minBid: minimumBid,
             auctionid: auctionID,
@@ -96,7 +117,7 @@ const NewAuction = () => {
             auctType: auctionType,
             start: "2023-08-12 13:00:00",
             end: "2023-08-12 14:00:00",
-            timePeriod: timePeriod,
+            timePeriod: '120',
             active: true,
         }).then(response => response.json()).then(body => {
         }).catch((error) => {

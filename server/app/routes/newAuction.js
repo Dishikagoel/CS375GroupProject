@@ -22,6 +22,7 @@ router.post("/addAuction", (req, res) => {
     let end = req.body.end;
     let timePeriod = req.body.timePeriod;
     let active = req.body.active;
+    let user = req.body.userid;
 
     pool.query(`
                 UPDATE auction
@@ -34,11 +35,12 @@ router.post("/addAuction", (req, res) => {
                     starttime = $6,
                     endtime = $7,
                     timeperiod = $8,
-                    active = $9
+                    active = $9,
+                    userid = $11
                 WHERE auctionid = $10
                     RETURNING *
         `,
-        [host, minBid, prodName, prodDesc, auctType, start, end, timePeriod, true, auctionid],
+        [host, minBid, prodName, prodDesc, auctType, start, end, timePeriod, true, auctionid, user],
         ).then((result) => {
     }).catch((error) => {
         console.log(error);
