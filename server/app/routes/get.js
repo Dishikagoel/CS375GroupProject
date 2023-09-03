@@ -83,10 +83,10 @@ router.get('/auction/:auctionid', (req, res) => {
 
 // GET request to retrieve auction information for a specific userId
 // To test run: curl http://localhost:3000/get/auction/userid
-router.get('/auction/:user', (req, res) => {
-    const user = req.params.user;
+router.get('/userAuctionInfo/:userid', (req, res) => {
+    const userid = req.params.userid;
 
-    pool.query("SELECT * FROM auction WHERE userid = $1;", [user])
+    pool.query("SELECT * FROM auction WHERE userid = $1;", [userid])
         .then((result) => {
             const rows = result.rows;
             res.json(rows);
