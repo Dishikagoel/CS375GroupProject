@@ -97,6 +97,20 @@ router.get('/userAuctionInfo/:userid', (req, res) => {
         });
 });
 
+router.get('/userBidInfo/:userid', (req, res) => {
+    const userid = req.params.userid;
+
+    pool.query("SELECT * FROM bid WHERE userid = $1 AND ranking = 1;", [userid])
+        .then((result) => {
+            const rows = result.rows;
+            res.json(rows);
+        })
+        .catch((error) => {
+            console.error("Error querying database:", error);
+            res.status(500).json({ error: "An error occurred while fetching data." });
+        });
+});
+
 // GET request to retrieve bid information for a specific auction ID and user ID
 // To test run: curl http://localhost:3000/get/bid/testing/testing
 router.get('/bid/:auctionid/:userid', (req, res) => {

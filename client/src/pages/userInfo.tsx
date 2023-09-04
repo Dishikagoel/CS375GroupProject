@@ -41,6 +41,28 @@ function AuctionTable({ auctions }) {
   );
 }
 
+function BidTable({ bids }) {
+    return (
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Auction ID</TableCell>
+              <TableCell>Final Bid</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {bids.map((bid) => (
+              <TableRow key={bid.auctionid}>
+                <TableCell>{bid.finalbid}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  }
+
 
 const theme = createTheme({
     palette: {
@@ -96,7 +118,7 @@ return {
 };
 }
 
-function BasicTabs({ auctions }) {
+function BasicTabs({ auctions, bids }) {
     const [value, setValue] = React.useState(0);
   
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -112,8 +134,11 @@ function BasicTabs({ auctions }) {
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          1. Purchase 
-          &nbsp;
+            {bids.length === 0 ? (
+                <div>You have not made any previous purchases yet.</div>
+            ) : (
+                <BidTable bids={bids} />
+            )}
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
             {auctions.length === 0 ? (
@@ -131,6 +156,7 @@ const UserInfo = () => {
     const userId = localStorage.getItem('userId'); 
     const [firstName, setFirstName] = useState(null);
     const [auctions, setAuctions] = useState([]);
+    const [bids, setBids] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:3000/get/userinfo/${userId}`)
@@ -150,8 +176,17 @@ const UserInfo = () => {
             .catch((error) => {
                 console.log('Error:', error);
             });
+        
+        axios.get(`http://localhost:3000/get/userBidInfo/${userId}`)
+        .then((response) => {
+            setBids(response.data);
+        })
+        .catch((error) => {
+            console.log('Error:', error);
+        });
+
     }, [userId]);
-    console.log(auctions);
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -164,7 +199,7 @@ const UserInfo = () => {
                             <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
                                 {firstName ? `Hello ${firstName}!` : `Hello ${userId}`}
                             </Typography>
-                            <BasicTabs auctions={auctions} />
+                            <BasicTabs auctions={auctions} bids={bids} />
                             </CardContent>
                             <Box sx={{ marginBottom: 3 }}>
                                 <Buttons />

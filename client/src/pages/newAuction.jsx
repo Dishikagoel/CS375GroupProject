@@ -104,7 +104,16 @@ const NewAuction = () => {
             console.error('Error uploading images:', error);
         }
 
+        function formatDateTime(date, time) {
+            return `${date} ${time}:00`;
+          }
+
         const name = firstName + " " + lastName;
+        const startDateTime = formatDateTime(auctionDate, auctionStartTime);
+        const endDateTime = formatDateTime(auctionDate, auctionEndTime);
+        console.log(auctionDate);
+        console.log(auctionStartTime);
+        console.log(startDateTime);
 
         let myUrl = `http://localhost:3000/newAuction/addAuction`;
         axios.post(myUrl, {
@@ -150,13 +159,13 @@ const NewAuction = () => {
     const handleAuctionStartTimeChange = (e) => {
         const startTime = e.target.value;
         setAuctionStartTime(startTime);
-        calculateTimePeriod(startTime, auctionEndTime);
+        //calculateTimePeriod(startTime, auctionEndTime);
     };
 
     const handleAuctionEndTimeChange = (e) => {
         const endTime = e.target.value;
         setAuctionEndTime(endTime);
-        calculateTimePeriod(auctionStartTime, endTime);
+        //calculateTimePeriod(auctionStartTime, endTime);
     };
 
     const handleDrop = (event) => {
