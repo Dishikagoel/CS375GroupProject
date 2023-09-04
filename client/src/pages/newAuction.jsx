@@ -55,6 +55,24 @@ const NewAuction = () => {
         setImages(prevImages => [...prevImages, ...newImages]);
     };
 
+    const userId = localStorage.getItem('userId'); 
+    const [firstName, setFirstName] = useState(null);
+    const [lastName, setLastName] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/get/userinfo/${userId}`)
+            .then((response) => {
+                const userData = response.data[0]; 
+                const userFirstName = userData.firstname;
+                const userLastName = userData.lastname;
+                setFirstName(userFirstName); 
+                setLastName(userLastName); 
+
+            })
+            .catch((error) => {
+                console.log('Error:', error);
+            });
+    }, [userId]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -86,9 +104,21 @@ const NewAuction = () => {
             console.error('Error uploading images:', error);
         }
 
+        function formatDateTime(date, time) {
+            return `${date} ${time}:00`;
+          }
+
+        const name = firstName + " " + lastName;
+        const startDateTime = formatDateTime(auctionDate, auctionStartTime);
+        const endDateTime = formatDateTime(auctionDate, auctionEndTime);
+        console.log(auctionDate);
+        console.log(auctionStartTime);
+        console.log(startDateTime);
+
         let myUrl = `http://localhost:3000/newAuction/addAuction`;
         axios.post(myUrl, {
-            host: "hostid",
+            host: name,
+            userid: userId,
             title: title,
             minBid: minimumBid,
             auctionid: auctionID,
@@ -96,7 +126,7 @@ const NewAuction = () => {
             auctType: auctionType,
             start: "2023-08-12 13:00:00",
             end: "2023-08-12 14:00:00",
-            timePeriod: timePeriod,
+            timePeriod: '120',
             active: true,
         }).then(response => response.json()).then(body => {
         }).catch((error) => {
@@ -129,13 +159,13 @@ const NewAuction = () => {
     const handleAuctionStartTimeChange = (e) => {
         const startTime = e.target.value;
         setAuctionStartTime(startTime);
-        calculateTimePeriod(startTime, auctionEndTime);
+        //calculateTimePeriod(startTime, auctionEndTime);
     };
 
     const handleAuctionEndTimeChange = (e) => {
         const endTime = e.target.value;
         setAuctionEndTime(endTime);
-        calculateTimePeriod(auctionStartTime, endTime);
+        //calculateTimePeriod(auctionStartTime, endTime);
     };
 
     const handleDrop = (event) => {

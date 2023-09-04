@@ -6,12 +6,9 @@ const pool = new Pool(env);
 
 router.post('/login', async (req, res) => {
     const { email, pass } = req.body;
-    console.log(email, pass);
 
     const query = 'SELECT * FROM userInfo WHERE email = $1';
     const { rows } = await pool.query(query, [email]);
-    console.log(rows);
-
     if (rows.length === 0) {
         return res.status(401).json({message: 'User not found'});
     }
@@ -19,7 +16,7 @@ router.post('/login', async (req, res) => {
     const userDb = rows[0];
 
     if (pass === userDb.password) {
-        return res.json({user: userDb.userid});
+        return res.json({ userId: userDb.userid });
     }
     res.status(401).json({message: 'Incorrect passowrd'});
 })
