@@ -60,7 +60,10 @@ app.use('/upload', imageUploadRouter);
 const auctionRouter = require('./routes/auction');
 app.use('/auction', auctionRouter);
 
-app.get('/', (req, res) => res.send());
+// Catch-all route for client-side routing.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 server.listen(port, hostname, () => {
     console.log(`Listening at: http://${hostname}:${port}`);
