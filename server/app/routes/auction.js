@@ -7,7 +7,7 @@ function decideWinner(userBidMap, auctionType) {
     let sortedBids = Object.keys(userBidMap).sort((a, b) => userBidMap[b] - userBidMap[a]);
     const sortedBidsMap = {};
 
-    if (auctionType === 'seal-highest-bid' || auctionType === 'open-ascending') {
+    if (auctionType.toLowerCase() === 'first-bid sealed' || auctionType.toLowerCase() === 'open-ascending') {
         let i = 0;
         sortedBids.forEach((key) => {
             sortedBidsMap[key] = {
@@ -17,7 +17,7 @@ function decideWinner(userBidMap, auctionType) {
             i++;
         });
     } 
-    else if (auctionType === 'seal-second-highest') {
+    else if (auctionType.toLowerCase() === 'second-bid sealed') {
         for (let i=0; i < sortedBids.length; i++) {
             if (i+1 >= sortedBids.length) {
                 sortedBidsMap[sortedBids[i]] = userBidMap[sortedBids[i]];
@@ -79,6 +79,22 @@ async function getUserInfo(userid) {
         return null;
     }
 }
+
+router.post("/save-sealed-bid", async (req, res) => {
+    try {
+        const bidData = [req.body.userid, req.body.auctionid, req.body.bid];
+        const updateQuery = `
+            UPDATE bid
+            SET finalbid = $3
+            WHERE userid = $1 AND auctionid = $2;
+        `;
+        await pool.query(updateQuery, bidData);
+        return res.send("saved sealed bid");
+    } catch (error) {
+        console.error("Error querying database:", error);
+        return res.status(500).send("Error querying database");
+    }
+});
 
 
 router.post("/submit-bids", async (req, res) => {

@@ -23,6 +23,12 @@ const Product = () => {
     const [startTime, setStartTime] = useState(new Boolean());
     const [endTime, setEndTime] = useState(new Boolean());
 
+    const auctionTypeUrlMap = {
+        'open-ascending': 'open-bid',
+        'first-bid sealed': 'seal-bid',
+        'second-sid sealed': 'seal-bid',
+    }
+
     useEffect(() => {
         axios
             .get(`http://localhost:3000/get/auction/${auctionId}`)
@@ -144,7 +150,7 @@ const Product = () => {
                                 variant="contained"
                                 color="primary"
                                 onClick={() => {
-                                    window.location.href = `/open-bid/${auctionId}`;
+                                    window.location.href = `/${auctionTypeUrlMap[productDetails.auctiontype.toLowerCase()]}/${auctionId}`;
                                 }}
                             >
                                 Enter Bidding
