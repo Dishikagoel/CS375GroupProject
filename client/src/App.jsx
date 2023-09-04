@@ -11,6 +11,8 @@ import NewAuction from './pages/newAuction.jsx';
 import UserAgreement from './pages/userAgreement';
 import Dashboard from './pages/dashboard.jsx';
 import Product from './pages/product.jsx';
+import SealBid from './pages/seal-bid';
+import './App.css';
 
 const socket = io.connect('http://localhost:3000');
 
@@ -39,6 +41,9 @@ function App() {
               <OpenBid 
                 socket={socket}
               />
+            } />
+            <Route path="/seal-bid/:auctionID" element={
+              <SealBid />
             } />
           </Routes>
         </div>
