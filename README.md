@@ -1,5 +1,17 @@
 # CS375GroupProject
 
+## How to run the app instruction for professor Long:
+
+### Option 1:
+- Once you are inside `CS375GroupProject`, `cd client` and then run `npm run build`. That build command has been set up so that the content of the output folder will automatically being moved to inside the `server/public` folder
+- cd into `CS375GroupProject/server` and then run `npm run start` or `npm run dev`
+- You should see the app in `http://localhost:3000/`
+
+### Option 2:
+- Once you are inside `CS375GroupProject`, `cd server` and then run `npm run dev`
+- Open another terminal, cd into `CS375GroupProject/client` and then run `npm run dev`
+- You should see the app in `http://localhost:5173/`
+
 ## How to setup development environment:
  - Clone the project: `git clone git@github.com:alexgmaier11/CS375GroupProject.git`
  - `cd CS375GroupProject` and `npm install`
