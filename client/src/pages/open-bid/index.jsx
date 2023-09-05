@@ -27,10 +27,10 @@ const OpenBid = ({ socket }) => {
     const url = `http://localhost:3000/get/auctionBidders/${auctionID}`;
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/get/bid/${auctionID}`)
+        axios.get(`http://localhost:3000/get/auction/${auctionID}`)
         .then(res => {
-            let starttime = new Date(res.data[0].starttime);
-            let endtime = new Date(res.data[0].endtime);
+            let starttime = new Date(res.data[0]?.starttime);
+            let endtime = new Date(res.data[0]?.endtime);
 
             let currentTime = new Date();
             if (currentTime < starttime) {
@@ -101,7 +101,7 @@ const OpenBid = ({ socket }) => {
                         auctionID={auctionID}
                         bidders={bidders}
                         isBidOpen={isBidOpen}
-                        currentBidder={currentBidder}
+                        currentBidder={currentUser}
                         inputValues={inputValues}
                         setInputValues={setInputValues}
                     />

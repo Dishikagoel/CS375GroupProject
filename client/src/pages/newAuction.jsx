@@ -22,6 +22,21 @@ function rand() {
     return result;
 }
 
+function subtractFourHours(time) {
+    const [hours, minutes] = time.split(':').map(Number);
+
+    // Subtract 4 hours and handle underflow
+    const newHours = hours - 4;
+    const newMinutes = minutes;
+
+    if (newHours < 0) {
+        // Handle underflow by wrapping around to the previous day
+        return `${24 + newHours}:${newMinutes.toString().padStart(2, '0')}`;
+    }
+
+    return `${newHours}:${newMinutes.toString().padStart(2, '0')}`;
+}
+
 const NewAuction = () => {
     const auctionID = rand();
     const [title, setTitle] = useState('');
@@ -104,13 +119,9 @@ const NewAuction = () => {
             console.error('Error uploading images:', error);
         }
 
-        function formatDateTime(date, time) {
-            return `${date} ${time}:00`;
-          }
-
         const name = firstName + " " + lastName;
-        const startDateTime = formatDateTime(auctionDate, auctionStartTime);
-        const endDateTime = formatDateTime(auctionDate, auctionEndTime);
+        const startDateTime = new Date(auctionDate + 'T' + subtractFourHours(auctionStartTime) + ':00');
+        const endDateTime = new Date(auctionDate + 'T' + subtractFourHours(auctionEndTime) + ':00');
         console.log(auctionDate);
         console.log(auctionStartTime);
         console.log(startDateTime);
@@ -124,9 +135,9 @@ const NewAuction = () => {
             auctionid: auctionID,
             prodDesc: description,
             auctType: auctionType,
-            start: "2023-08-12 13:00:00",
-            end: "2023-08-12 14:00:00",
-            timePeriod: '120',
+            start: startDateTime,
+            end: endDateTime,
+            timePeriod: timePeriod,
             active: true,
         }).then(response => response.json()).then(body => {
         }).catch((error) => {
@@ -159,13 +170,13 @@ const NewAuction = () => {
     const handleAuctionStartTimeChange = (e) => {
         const startTime = e.target.value;
         setAuctionStartTime(startTime);
-        //calculateTimePeriod(startTime, auctionEndTime);
+        calculateTimePeriod(startTime, auctionEndTime);
     };
 
     const handleAuctionEndTimeChange = (e) => {
         const endTime = e.target.value;
         setAuctionEndTime(endTime);
-        //calculateTimePeriod(auctionStartTime, endTime);
+        calculateTimePeriod(auctionStartTime, endTime);
     };
 
     const handleDrop = (event) => {
