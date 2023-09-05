@@ -18,34 +18,36 @@ router.post("/addAuction", (req, res) => {
     let prodName = req.body.title;
     let prodDesc = req.body.prodDesc;
     let auctType = req.body.auctType;
-    let start =  req.body.start;
-    let end = req.body.end;
+    let starttime =  req.body.start;
+    let endtime = req.body.end;
     let timePeriod = req.body.timePeriod;
     let active = req.body.active;
     let user = req.body.userid;
 
     pool.query(`
-                UPDATE auction
-                SET
-                    host = $1,
-                    minbid = $2,
-                    productname = $3,
-                    productdesc = $4,
-                    auctiontype = $5,
-                    starttime = $6,
-                    endtime = $7,
-                    timeperiod = $8,
-                    active = $9,
-                    userid = $11
-                WHERE auctionid = $10
-                    RETURNING *
-        `,
-        [host, minBid, prodName, prodDesc, auctType, start, end, timePeriod, true, auctionid, user],
-        ).then((result) => {
-    }).catch((error) => {
-        console.log(error);
-    });
-    
+        UPDATE auction
+        SET
+            host = $1,
+            minbid = $2,
+            productname = $3,
+            productdesc = $4,
+            auctiontype = $5,
+            starttime = $6,
+            endtime = $7,
+            timeperiod = $8,
+            active = $9,
+            userid = $11
+        WHERE auctionid = $10
+        RETURNING *
+    `,
+        [host, minBid, prodName, prodDesc, auctType, starttime, endtime, timePeriod, true, auctionid, user])
+        .then((result) => {
+            res.json(result.rows);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
 });
 
 module.exports = router;

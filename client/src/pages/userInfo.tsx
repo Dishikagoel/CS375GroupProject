@@ -9,6 +9,12 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 
 function AuctionTable({ auctions }) {
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        const formattedDate = date.toLocaleDateString(); // Format the date
+        const formattedTime = date.toLocaleTimeString(); // Format the time
+        return `${formattedDate} ${formattedTime}`;
+    };
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -30,9 +36,9 @@ function AuctionTable({ auctions }) {
               <TableCell>{auction.productname}</TableCell>
               <TableCell>{auction.productdesc}</TableCell>
               <TableCell>{auction.minbid}</TableCell>
-              <TableCell>{auction.starttime}</TableCell>
-              <TableCell>{auction.endtime}</TableCell>
-              <TableCell>{auction.auctiontype}</TableCell>
+                <TableCell>{formatTime(auction.starttime)}</TableCell>
+                <TableCell>{formatTime(auction.endtime)}</TableCell>
+                <TableCell>{auction.auctiontype}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -92,7 +98,6 @@ function Buttons() {
 
 function CustomTabPanel(props: TabPanelProps) {
 const { children, value, index, ...other } = props;
-console.log(`Rendering CustomTabPanel with index ${index}`);
 
 return (
     <div
